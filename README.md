@@ -4,4 +4,4 @@ pdflatex paper
 bibtex paper
 pdflatex paper
 ```
-The paper is split into one file per section.
+The paper is split into one file per section. It is.
