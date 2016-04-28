@@ -1,5 +1,33 @@
 \section{Introduction}
 \label{sec:intro}
 
-According to \newcite{Chrupala2015LearningLT} this is like that \cite{Kdr2016RepresentationOL}.
-\newcite{DBLP:journals/corr/RibeiroSG16} introduce blah. Haha.
+Children acquire their native language with little and weak
+supervision, exploiting noisy correlations between speech, visual, and
+other sensory signals, as well as via feedback from interaction with
+their peers and parents. Computationally modeling this ability has
+been the focus of much research, under scenarious simplified
+in a variety of ways, for example:
+
+\begin{itemize}
+\item distributional learning from pure word-word co-occurrences with
+  no perceptual grounding \cite{landauer1998introduction,kiros2015skip};
+\item cross-situational learning with word sequences and sets of
+  symbols representing sensory input
+  \cite{siskind.96,fazly.etal.10csj};
+\item cross-situational learning using sensory speech and visual
+  input, but with extremely limited sets of words and objects
+  \cite{Roy2002113,iwahashi2003language}.
+\end{itemize}
+
+Some recent models have used more naturalistic, larger-scale inputs,
+for example in cross-modal distributional semantics
+\cite{lazaridou2015combining} or in implementations of the
+acquisition process trained on images paired with their descriptions
+\cite{chrupala2015learning}. While in these
+works the representation of the {\it visual scene} consists of
+pixel-level perceptual data, the {\it linguistic} input consists of
+sentences segmented into discrete word symbols. In this paper we take
+a step towards addressing this major limitation, by using the phonetic
+representation of input utterances. While this type of input is still
+symbolic rather than perceptual, it goes a long way toward making the
+setting more naturalistic, and the acquisition problem more difficult.
