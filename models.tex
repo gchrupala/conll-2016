@@ -1,2 +1,57 @@
 \section{Models}
 \label{sec:models}
+
+The architecture of our model is depicted in Figure
+\ref{fig:architecture} and consists of a phoneme embedding layer,
+followed by a stack of $N$ Gated Recurrent Neural nets, followed by
+densely connected layer which maps the last hidden state of the top
+recurrent layer to a vector of visual features. 
+
+Gated Recurrent Units (GRU) were introduced in
+\newcite{cho2014properties} and \newcite{chung2014empirical} as an
+attempt to alleviate the problem of vanishing gradient in standard
+simple recurrent nets as known since the work of
+\newcite{elman1990finding}. GRUs have a linear shortcut through
+timesteps which bypasses the nonlinearity and thus promotes gradient
+flow.
+Specifically, a GRU computes the hidden state at current time step, $\mathbf{h}_{t}$, as the
+linear combination of previous activation $\mathbf{h_{t-1}}$, and a new
+{\it candidate} activation $\mathbf{\tilde{h}}_t$:
+%
+
+\begin{equation}
+  \mathrm{gru}(\mathbf{h}_{t-1}, \mathbf{x}_t) = (1 - \mathbf{z}_t)\odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \mathbf{\tilde{h}}_t
+\vspace{-.1cm}
+\end{equation}
+%
+where $\odot$ is elementwise multiplication, and the update gate
+activation $\mathbf{z_{t}}$ determines the amount of new information
+mixed in the current state:
+%
+
+\begin{equation}
+\label{eq:gru-update}
+   \mathbf{z}_t = \sigma_s(\mathbf{W}_z \mathbf{x}_t + \mathbf{U}_z \mathbf{h}_{t-1})
+\end{equation}
+%
+The candidate activation is computed as:
+%
+\begin{equation}
+\label{eq:gru-cand}
+   \mathbf{\tilde{h}}_t = \sigma(\mathbf{W} \mathbf{x}_t + \mathbf{U}(\mathbf{r}_t \odot \mathbf{h}_{t-1}))
+\end{equation}
+%
+The reset gate $\mathbf{r_{t}}$ determines how much of the current
+input $\mathbf{x_{t}}$ is mixed in the previous state
+$\mathbf{h}_{t-1}$ to form the candidate activation:
+%
+\begin{equation}
+\label{eq:gru-reset}
+   \mathbf{r}_t = \sigma_s(\mathbf{W}_r \mathbf{x}_t + \mathbf{U}_r \mathbf{h}_{t-1})
+\end{equation}
+
+By applying the $\mathrm{gru}$ function repeatedly a GRU layer maps a
+sequence of inputs to a sequence of states:
+\begin{equation}
+  \mathrm{GRU}(\mathbf{X}, \mathbf{h}_0) = \mathrm{gru}(\mathbf{x}_n, \dots, \mathrm{gru}(\mathbf{x}_2, \mathrm{gru}(\mathbf{x}_1, \mathbf{h}_0)))
+\end{equation}

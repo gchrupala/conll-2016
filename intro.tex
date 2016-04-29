@@ -21,13 +21,30 @@ in a variety of ways, for example:
 
 Some recent models have used more naturalistic, larger-scale inputs,
 for example in cross-modal distributional semantics
-\cite{lazaridou2015combining} or in implementations of the
-acquisition process trained on images paired with their descriptions
-\cite{chrupala2015learning}. While in these
-works the representation of the {\it visual scene} consists of
-pixel-level perceptual data, the {\it linguistic} input consists of
-sentences segmented into discrete word symbols. In this paper we take
-a step towards addressing this major limitation, by using the phonetic
-representation of input utterances. While this type of input is still
-symbolic rather than perceptual, it goes a long way toward making the
-setting more naturalistic, and the acquisition problem more difficult.
+\cite{lazaridou2015combining} or in implementations of the acquisition
+process trained on images paired with their descriptions
+\cite{chrupala2015learning}. While in these works the representation
+of the {\it visual scene} consists of pixel-level perceptual data, the
+{\it linguistic} input consists of sentences segmented into discrete
+word symbols. In this paper we take a step towards addressing this
+major limitation, by using the phonetic representation of input
+utterances. While this type of input is symbolic rather than
+perceptual, it goes a long way toward making the setting more
+naturalistic, and the acquisition problem more challenging: the
+learner needs to discover structure corresponding to morphemes, words
+and phrases in an unsegmented string of phonemes, and the length of
+the dependencies that need to be detected grows substantially.
+
+We implement a simple architecture based on stacked recurrent neural
+networks with Gated Recurrent Units \cite{chung2014empirical}: our
+model processes the utterance phoneme by phoneme while building a
+distributed low dimensional representation through a series of
+recurrent layers. Once it reaches the end of the utterance it attempts
+to predict the features of the corresponding visual scene. We train
+this model on a phonetically transcribed version of MS-COCO
+\cite{lin2014microsoft} and show that it is able to successfully learn
+to understand aspects of sentence meaning from the visual signal, and 
+exploits temporal structure in the input. We also show that different
+levels in the stack of recurrent layers represent different aspects of
+linguistic structure: low levels are comparatively more sensitive to
+form, and higher levels to visually salient elements of meaning.
