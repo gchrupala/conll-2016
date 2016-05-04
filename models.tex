@@ -1,11 +1,12 @@
 \section{Models}
 \label{sec:models}
 
-The architecture of our model is depicted in Figure
-\ref{fig:architecture} and consists of a phoneme embedding layer,
-followed by a stack of $N$ Gated Recurrent Neural nets, followed by
-densely connected layer which maps the last hidden state of the top
-recurrent layer to a vector of visual features. 
+\subsection{Phoneme Stacked GRU}
+The architecture of our main model of interest, {\sc Stacked GRU} is
+depicted in Figure \ref{fig:architecture} and consists of a phoneme
+embedding layer, followed by a stack of $N$ Gated Recurrent Neural
+nets, followed by densely connected layer which maps the last hidden
+state of the top recurrent layer to a vector of visual features.
 
 \begin{figure}
   \centering
@@ -27,7 +28,7 @@ linear combination of previous activation $\mathbf{h_{t-1}}$, and a new
 %
 
 \begin{equation}
-  \mathrm{gru}(\mathbf{h}_{t-1}, \mathbf{x}_t) = (1 - \mathbf{z}_t)\odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \mathbf{\tilde{h}}_t
+  \mathrm{gru}(\mathbf{x}_t, \mathbf{h}_{t-1}) = (1 - \mathbf{z}_t)\odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \mathbf{\tilde{h}}_t
 \vspace{-.1cm}
 \end{equation}
 %
@@ -62,3 +63,68 @@ sequence of inputs to a sequence of states:
 \begin{equation}
   \mathrm{GRU}(\mathbf{X}, \mathbf{h}_0) = \mathrm{gru}(\mathbf{x}_n, \dots, \mathrm{gru}(\mathbf{x}_2, \mathrm{gru}(\mathbf{x}_1, \mathbf{h}_0)))
 \end{equation}
+where $\mathbf{X}$ stands for the matrix composed of input column vectors
+$\mathbf{x}_1, \ldots, \mathbf{x}_n$. Two or more GRU layers can be composed into a stack: 
+\begin{equation}
+\mathrm{GRU}_2(\mathrm{GRU}_1(\mathbf{X}, {\mathbf{h}_{0}}_{1}), {\mathbf{h}_{0}}_{2}).
+\end{equation}
+In our version of the Stacked GRU architecture we use {\it residualized} layers:
+\begin{equation}
+\mathrm{GRU_{res}}(\mathbf{X}, \mathbf{h}_0) = \mathrm{GRU}(\mathbf{X}, \mathbf{h}_0) + \mathbf{X}
+\end{equation}
+Residual convolutional networks were introduced by
+\newcite{he2015deep}, while \newcite{oord2016pixel} showed their
+applicability to recurrent architectures. We adopt residualized layers
+here are we observed they speed up learning in stacks of several
+GRU layers.
+
+Our gated recurrent units use steep sigmoids for gate activations: \[
+\sigma_s(z) = \frac{1}{1 + \exp(-3.75z)} 
+\]
+and rectified linear units clipped between 0 and 5 for the unit
+activations:
+\[
+\sigma(z) = \mathrm{clip(0.5(z+\mathrm{abs}(z)), 0, 5)}
+\]
+
+There are two more components of out {\sc Stacked GRU} model: the
+character embeddings, and mapping from the final state of the top GRU
+layer to the image feature vector.
+The embedding layer is a lookup table with learnable parameters $\mathbf{E}$ with each
+column corresponding to a vector for a particular phoneme. The input
+phoneme $p_t$ of utterancee $p$ at each step $t$ indexes into the
+embedding matrix and produces the input column vector:
+\begin{equation}
+  \mathbf{x}_t = \mathbf{E}[:,p_t].
+\end{equation}
+Finally, we map the final state of the top GRU layer ${\mathbf{h}_k}_n$
+to the vector of image features using a fully connected layer:
+
+\begin{equation}
+  \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h}_k}_n
+\end{equation}
+
+Our main interest lies in  recurrent phoneme-level modeling. However in order to
+put the performance of the phoneme-level {\sc Stacked GRU} into
+perspective we compare it to the following two other models.
+
+
+\subsection{Word GRU}
+The architecture of this model is the same as {\sc Stacked GRU} with
+the difference that we use words instead of phonemes as input symbols,
+as accordingly modify the size of embedding layer, and reduce the
+number of layers in the GRU stack. See
+\ref{sec:experiments} for details.
+\subsection{Word Vector Sum}
+The second model we use for comparison is word-based non-sequential
+model, consisting of a word embedding matrix, a vector sum operator,
+and a mapping to the image vector feature vector:
+\begin{equation}
+  \label{eq:sum}
+  \hat{\mathbf{i}} = \mathbf{I} \sum_{t=1}^n \mathbf{E}[:,w_t]
+\end{equation}
+where $w_t$ is the word at position $t$ in the input utterance.
+This model simply learns word embeddings which are then summed into a
+single vector and projected to the target image vector. Thus this model does
+not have access to word sequence information, and is a distributed
+analog of a bag-of-words model.
