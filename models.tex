@@ -4,7 +4,7 @@
 \subsection{Phoneme Stacked GRU}
 The architecture of our main model of interest, {\sc Stacked GRU} is
 depicted in Figure \ref{fig:architecture} and consists of a phoneme
-embedding layer, followed by a stack of $N$ Gated Recurrent Neural
+embedding layer, followed by a stack of $K$ Gated Recurrent Neural
 nets, followed by densely connected layer which maps the last hidden
 state of the top recurrent layer to a vector of visual features.
 
@@ -97,11 +97,11 @@ embedding matrix and produces the input column vector:
 \begin{equation}
   \mathbf{x}_t = \mathbf{E}[:,p_t].
 \end{equation}
-Finally, we map the final state of the top GRU layer ${\mathbf{h}_k}_n$
+Finally, we map the final state of the top GRU layer ${\mathbf{h}_K}_n$
 to the vector of image features using a fully connected layer:
 
 \begin{equation}
-  \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h}_k}_n
+  \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h}_K}_n
 \end{equation}
 
 Our main interest lies in  recurrent phoneme-level modeling. However in order to
