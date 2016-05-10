@@ -5755,3 +5755,16 @@
 1 5900 0 valid 0.574426 run-draft-4-ipa-1h-res
 1 6000 0 valid 0.57198 run-draft-4-ipa-1h-res
 1 6100 0 valid 0.56941 run-draft-4-ipa-1h-res
+1 6200 0 valid 0.569314 run-draft-4-ipa-1h-res
+1 6300 0 valid 0.570027 run-draft-4-ipa-1h-res
+1 6400 0 valid 0.567048 run-draft-4-ipa-1h-res
+2 100 0 valid 0.566879 run-draft-4-ipa-1h-res
+2 200 0 valid 0.565149 run-draft-4-ipa-1h-res
+2 300 0 valid 0.565142 run-draft-4-ipa-1h-res
+2 400 0 valid 0.564112 run-draft-4-ipa-1h-res
+2 500 0 valid 0.5623 run-draft-4-ipa-1h-res
+2 600 0 valid 0.561742 run-draft-4-ipa-1h-res
+2 700 0 valid 0.561001 run-draft-4-ipa-1h-res
+2 800 0 valid 0.562072 run-draft-4-ipa-1h-res
+2 900 0 valid 0.560901 run-draft-4-ipa-1h-res
+2 1000 0 valid 0.558665 run-draft-4-ipa-1h-res
