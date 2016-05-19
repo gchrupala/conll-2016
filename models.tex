@@ -87,13 +87,13 @@ activations:
 \sigma(z) = \mathrm{clip(0.5(z+\mathrm{abs}(z)), 0, 5)}
 \]
 
-There are two more components of out {\sc Stacked GRU} model: the
-character embeddings, and mapping from the final state of the top GRU
+There are two more components of our {\sc Stacked GRU} model: the
+phoneme encoding layer, and mapping from the final state of the top GRU
 layer to the image feature vector.
-The embedding layer is a lookup table with learnable parameters $\mathbf{E}$ with each
-column corresponding to a vector for a particular phoneme. The input
+The phoneme encoding layer is a simply a lookup table $\mathbf{E}$ whose
+columns correspond to one-hot-encoded phoneme vectors. The input
 phoneme $p_t$ of utterancee $p$ at each step $t$ indexes into the
-embedding matrix and produces the input column vector:
+encoding matrix and produces the input column vector:
 \begin{equation}
   \mathbf{x}_t = \mathbf{E}[:,p_t].
 \end{equation}
@@ -112,8 +112,8 @@ perspective we compare it to the following two other models.
 \subsection{Word GRU}
 The architecture of this model is the same as {\sc Stacked GRU} with
 the difference that we use words instead of phonemes as input symbols,
-as accordingly modify the size of embedding layer, and reduce the
-number of layers in the GRU stack. See
+use learnable word embeddings instead of fixed on-hot phoneme
+encodings, and reduce the number of layers in the GRU stack. See
 \ref{sec:experiments} for details.
 \subsection{Word Vector Sum}
 The second model we use for comparison is word-based non-sequential
