@@ -45,14 +45,15 @@ ggsave("../loss.png")
 
 # Zoom in
 
-ggplot(data=data %>% filter(epoch >= 3 & Model %in% c("Word Sum","Word GRU 1", "Phon GRU 3")) , 
+ggplot(data=data %>% filter(Model %in% c("Word Sum","Word GRU 1", "Phon GRU 3")) , 
        aes(x=(epoch-1) * MAX + item, y=loss, color=Model, shape=Model)) + 
-  geom_point(alpha=0.8) + 
+  geom_point(alpha=0.5) + 
+  ylim(0.49, 0.6) +
   scale_x_continuous(breaks=0:8 * MAX, labels=0:8) +
   xlab("Epoch") +
   ylab("Loss") +
   theme(aspect.ratio=2/3, text=element_text(size=25))
-ggsave("../loss-zoom.png")
+ggsave("../loss-zoom.pdf")
 
 data %>% group_by(Model) %>% summarize(min_loss=(min(loss))) %>% ggplot(aes(y=min_loss, x=Model)) + geom_boxplot()
 
@@ -65,5 +66,8 @@ recall  %>% group_by(exp) %>% summarize(max_score=max(score)) %>%
   ggplot(aes(x=Model, y=max_score)) + 
   geom_point(size=3, alpha=0.5) +
   coord_flip() +
-  ylab("Recall @ 5") +
-  theme(aspect.ratio=2/3.5, text=element_text(size=25))
+  ylab("Accuracy at 5") +
+  theme(aspect.ratio=2/2.5, text=element_text(size=25))
+ggsave("../accat5.pdf")
+
+recall %>% parse_exp() %>% group_by(exp) %>% ggplot(aes(x=Model, y=score)) + geom_boxplot()

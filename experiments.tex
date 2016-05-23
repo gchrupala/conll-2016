@@ -3,7 +3,7 @@
 
 % introduceer experimenten?
 For all experiments, the model was trained on the training split of the MSCOCO dataset. Captions were transcribed phonetically automatically using eSpeak. Stress and pause markers were cleaned out, as well as word boundaries, leaving only the phonemic symbols. % Visual input consisted of  ja wat eigenlijk. misschien moet dit wel in de models-sectie?
-
+\input{visual}
 \subsection{Word boundary prediction}
 To explore the sensitivity of the model to linguistic structure at the sub-word level, we trained logistic regression models to predict and recognize word boundaries from the activation patterns of all hidden layers. The task of the prediction models was to determine whether a certain timestep was a word end, given the activation pattern at one of the hidden layers. The task of the recognition models was to identify word onsets based on activation patterns. Data was shuffled before training and testing. All models were trained on a random selection of 5000 sentences from the validation split, and tested on the rest of the validation split. % model settings %are these standardized splits? (no) By whom? how much is 'the rest'? was it a good idea to randomly select sentences, rather than pictures?
 For comparison, we also trained logistic regression models on n-gram data to perform the same tasks. The features available to these models were positional n-grams. %write more once you know what you're doing
