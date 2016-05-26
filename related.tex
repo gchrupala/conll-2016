@@ -1,1 +1,16 @@
 \section{Related work}
+From the language acquisition tradition, there has been extensive work on word learning and word segmentation in the cross-situational learning paradigm. %you should probably extend this somewhat & mention some experimental work. also that sentence is really ugly.
+Two computational models that take the continuous nature of the speech signal into account, as well as incorporating visual information, are the Cross-channel Early Lexical Learning (CELL) model of Roy \& Pentland (2002) %cite
+and the more recent work of Räsänen \& Rasilo (2014). %cite
+The CELL model aims to discover words from continuous speech and learn their meaning, but is very limited with regards to visual input, which only consists of the shape of single objects in the visual context. More recently, Räsänen \& Rasilo (2014) %cite
+propose a probabilistic joint model of word segmentation and meaning acquisition from raw speech and visual context. The visual context in this model consists of a collection of possible referents that are present in the environment, making it richer than the visual input in CELL, but also abstracting away further from the raw visual data. 
+
+Apart from language acquisition research, this study is also related to current work in the cross-over of computer vision and natural language processing on image captioning. [something on image captioning (problem is that you now have too much to choose from), multimodal translation (Elliot Frank Hasler)… ….]
+
+Another related field is in the tradition of Automatic Speech Recognition (ASR). Whereas ASR models are typically trained on speech recordings with aligned textual transcriptions, there has been work on learning to recognize speech from accompanying visual data [Cite Synnaeve et al, Hatwarth \& Glass].%cite
+Perhaps most relevant to our endeavours is the work of Harwarth \& Glass (2014). %cite
+In this study, a visual object recognition model and a are coupled by a shared word embedding layer, which learns shared semantic representation from speech and visual data. The speech signal is segmented into words before presenting it to the model, breaking the continuity of the speech signal. In the work of Synnaeve et al., %cite
+the linguistic input only consists of spoken content words that appear in the captions accompanying the images. Perhaps surprisingly, then, work on multimodally trained ASR faces similar limitations as work in the image captioning discussion: the language input consists of word-sized chunks, rather than a continuous input signal – at least not extending to the whole utterance.
+
+Chrupala et al (2015) %cite
+simulate visually grounded human language learning with specific sensitivity to the noise and ambiguity in the visual domain. In an approach that is technically similar to recent work on neural image captioning in the computer vision and NLP domain, they model language learning as a task of predicting visual context given a sequence of words. While the visual input consists of a continuous representation, the language input consists of a sequence of words. This study aims to expand their approach to a continuous language representation in the form of a sequence of phoneme symbols.
