@@ -8,8 +8,8 @@ propose a probabilistic joint model of word segmentation and meaning acquisition
 Apart from language acquisition research, this study is also related to current work in the cross-over of computer vision and natural language processing on image captioning. [something on image captioning (problem is that you now have too much to choose from), multimodal translation (Elliot Frank Hasler)… ….]
 
 Another related field is in the tradition of Automatic Speech Recognition (ASR). Whereas ASR models are typically trained on speech recordings with aligned textual transcriptions, there has been work on learning to recognize speech from accompanying visual data [Cite Synnaeve et al, Hatwarth \& Glass].%cite
-Perhaps most relevant to our endeavours is the work of Harwarth \& Glass (2014). %cite
-In this study, a visual object recognition model and a are coupled by a shared word embedding layer, which learns shared semantic representation from speech and visual data. The speech signal is segmented into words before presenting it to the model, breaking the continuity of the speech signal. In the work of Synnaeve et al., %cite
+Harwarth \& Glass (2014) % cite
+employ two convolutional neural networks, a visual object recognition model and a word recognition model, and an embedding alignment model that learns to map recognized words and objects into the same high-dimensional space. ALthough the object recognition works on the raw visual input, the speech signal is segmented into words before presenting it to the word recognition model, breaking the continuity of the speech signal. In the work of Synnaeve et al., %cite
 the linguistic input only consists of spoken content words that appear in the captions accompanying the images. Perhaps surprisingly, then, work on multimodally trained ASR faces similar limitations as work in the image captioning discussion: the language input consists of word-sized chunks, rather than a continuous input signal – at least not extending to the whole utterance.
 
 Chrupala et al (2015) %cite
