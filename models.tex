@@ -3,15 +3,15 @@
 
 \subsection{Phoneme Stacked GRU}
 The architecture of our main model of interest, {\sc Stacked GRU} is
-depicted in Figure \ref{fig:architecture} and consists of a phoneme
-embedding layer, followed by a stack of $K$ Gated Recurrent Neural
+schematically depicted in Figure \ref{fig:architecture} and consists of a phoneme
+encoding  layer, followed by a stack of $K$ Gated Recurrent Neural
 nets, followed by densely connected layer which maps the last hidden
 state of the top recurrent layer to a vector of visual features.
 
 \begin{figure}
   \centering
-  TODO
-  \caption{Architecture}
+  \includegraphics[scale=0.2]{architecture.pdf}
+  \caption{A three-timestep slice of the stacked recurrent architecture with three hidden layers.}
   \label{fig:architecture}
 \end{figure}
 
