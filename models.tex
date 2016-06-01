@@ -92,7 +92,7 @@ phoneme encoding layer, and mapping from the final state of the top GRU
 layer to the image feature vector.
 The phoneme encoding layer is a simply a lookup table $\mathbf{E}$ whose
 columns correspond to one-hot-encoded phoneme vectors. The input
-phoneme $p_t$ of utterancee $p$ at each step $t$ indexes into the
+phoneme $p_t$ of utterance $p$ at each step $t$ indexes into the
 encoding matrix and produces the input column vector:
 \begin{equation}
   \mathbf{x}_t = \mathbf{E}[:,p_t].
