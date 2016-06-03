@@ -2,18 +2,15 @@
 \label{sec:experiments}
 
 % introduceer experimenten? 
-For all experiments, the models were trained on the training portion % I don't like this word
-of the MS COCO dataset. Textual input was transcribed phonetically automatically using the default English voice of eSpeak for use with the {\sc Phoneme GRU} model.
-Stress and pause markers were cleaned out, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. % Visual input
+For all experiments, the models were trained on the training set of MS COCO. Textual input was transcribed phonetically automatically using the default English voice of eSpeak for use with the {\sc Stacked GRU} models. Stress and pause markers were cleaned out, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. % Dscribe visual input!!!!
 \input{visual}
 \subsection{Word boundary prediction}
-To explore the sensitivity of the {\sc Phoneme GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. A logistic regression model was trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks. The features available to these models were positional phoneme \textit{n}-grams in the range 1 - \textit{n}. Both the \textit{n}-gram models and hidden state models were implemented using scikitlearns implementation with l2-regularization and C set to 1000. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the actual location of word boundaries. However, eSpeak models some coarticulation effects that sometimes leads to word boundaries disappearing from the transcription.
+To explore the sensitivity of the {\sc Phoneme GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. A logistic regression model was trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks. The features available to these models were positional phoneme \textit{n}-grams in the range 1 - \textit{n}. Both the \textit{n}-gram models and hidden state models were implemented using scikitlearn implementation with l2-regularization and C set to 1000. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the actual location of word boundaries. However, eSpeak models some coarticulation effects that sometimes leads to word boundaries disappearing from the transcription.
 
 [example of a phonetic transcription with 'ova']
 
-Accuracy scores reported in table x and y are the averages over 5-fold cross validation on the validation portion of MS COCO. The proportion of phonemes preceding a word boundary is .29, meaning that predicting 'no word boundary' by default would be correct in .71 of cases. 
-Table x shows the accuracy of word boundary prediction by the regression models trained on activation patterns of the hidden layers. At the highest hidden layer, enough information about the word form is available to correctly predict a word end in .82 of cases - an improvement of .11 compared to the null baseline. The lower levels allow for more accurate prediction of word boundaries: .86 at the middle hidden layer, and .88 at the lowest level. These results indicate that information on sub-word structure is mostly encoded in the lower layers, and less so in the highest layer, which is consistent with the findings of \newcite{hermans2013training}. 
-Table y shows the average precision scores for the n-gram based models averaged over 5-fold cross validation. Performance of logistic regression based on the activation patterns of the lowest hidden layer is comparable to that of a bigram model. 
+Accuracy scores reported in table 1 are the averages over 5-fold cross validation on the validation portion of MS COCO. The proportion of phonemes preceding a word boundary is .29, meaning that predicting 'no word boundary' by default would be correct in .71 of cases. At the highest hidden layer, enough information about the word form is available to correctly predict word end in .82 of cases - an improvement of .11 compared to the null baseline. The lower levels allow for more accurate prediction of word boundaries: .86 at the middle hidden layer, and .88 at the lowest level. These results indicate that information on sub-word structure is mostly encoded in the lower layers, and is not as present in the higher layers. %Lelijke zin
+Prediction accuracy of the logistic regression model based on the activation patterns of the lowest hidden layer is comparable to that of a bigram logistic regression model.
 
 \begin{table}[]
 	\centering
@@ -32,34 +29,60 @@ Table y shows the average precision scores for the n-gram based models averaged 
 	\caption{Precision of word boundary prediction}
 \end{table}
 
-\subsection{Word Similarity} % you may want to say semantic, although that is somewhat questionable, and relatedness rather than similarity...
-To understand the encoding of semantic information by {\sc Stacked GRU}, we analyzed the similarity of activation vectors for word pairs from the MEN dataset % 
-to human similarity judgements. For comparison, we also 
-For each word pair in the MEN dataset, the words were transcribed phonetically automatically and then fed to the model individually. Cosine similarity between the activation patterns of the hidden layers at the last timestep were taken as the measures of similarity. % did you take the last timestep or end-of-sentence-symbol? If last timestep, why?
-Since the model has access to the surface forms of words, it may be able to exploit surface similarity when determining semantic relatedness. This may especially be the case when encountering infrequent words. If the meaning of a word is not known from previous encounters, well-known words that are similar in form may provide some clue to its meaning. To determine whether such an effect of phonetic similarity exists, a measure of phonemic difference was included: the edit distance between the phonetic transcriptions of the two words, normalized by dividing it by the length of the longer transcription.
 
-Table 3 shows Spearman's rank correlation coefficient between human similarity ratings from the MEN dataset and cosine similarity at the last timestep for all hidden layers. In all layers, the cosine similarity between the layers is significantly correlated with human similarity judgements. [should you report p?] The strength of the correlation, differs considerably between the layers, ranging from .09 in the first layer to 0.28 in the highest hidden layer. This indicates that semantic information is reflected in the activation pattern at the highest hidden layer, and somewhat less in the second hidden layer. 
+\subsection{Word Similarity}
+To understand the encoding of semantic information in {\sc Stacked GRU}, we analysed the cosine similarity of activation vectors for word pairs from the MEN dataset, and compared them to human similarity judgements.
+For each word pair in the MEN dataset, the words were transcribed phonetically using eSpeak and then fed to {\sc Stacked GRU} individually. For comparison, the words were also fed to {\sc Word GRU} and {\sc Word Sum}. Word pair similarity was quantified as the cosine similarity between the activation patterns of the hidden layers at the end-of-sentence symbol.
+In contrast to {\sc Word GRU} and {\sc Word Sum}, {\sc Stacked GRU} has access to the word forms. To explore the role of phonemic form in word similarity, a measure of phonemic difference was included: the Levenshtein distance between the phonetic transcriptions of the two words, normalized by dividing it by the length of the longer transcription. 
+
+Table 2 shows Spearman's rank correlation coefficient between human similarity ratings from the MEN dataset and cosine similarity at the last timestep for all hidden layers. In all layers, the cosine similarities between the activation vectors for two words are significantly correlated with human similarity judgements. The strength of the correlation differs considerably between the layers, ranging from .09 in the first layer to 0.28 in the highest hidden layer. The second column in Table 2 shows the correlations when only taking into account the 1283 word pairs of which both words appear at least 100 times in the training data. 
+Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher than for {\sc Stacked GRU}.
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{cccc}
+		&& All word pairs & Pairs of frequent words \\
+		{\sc Stacked GRU} & Layer 1 & 0.09 & 0.12\\
+		& Layer 2 & 0.21 & 0.33 \\
+		& Layer 3 & 0.28 & 0.45 \\
+		\hline
+		{\sc Word GRU} & & 0.48 & 0.60\\
+		\hline
+		{\sc Word Sum} & & 0.42 & 0.56
+	\end{tabular}
+	\caption{Spearman's rank correlation between cosine similarity and human similarity judgements. All correlations are significant at \textit{p} < 0.05.} % bad title
+\end{table}
+
+Table 3 shows Spearman's rank correlation coefficient between the edit distance and the cosine similarity of activation vectors at the hidden layers of {\sc Stacked GRU}.
+As is to be expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words that are more similar in form are also more similar in meaning. Note that in the MEN dataset, meaning and word form are indeed correlated: human similarity judgements and edit distance are correlated at -0.08. The correlation is strongest at the lowest hidden layer and weakest, though still present and stronger than for human judgements, at the third hidden layer. 
+The correlations of cosine similarities with edit distance on the one hand, and human similarity rating on the other hand, indicate that the different hidden layers reflect increasing levels of representation: whereas at the lowest level mostly encodes information about form, the highest layer mostly encodes semantic information.
+
+%should you report p-values for correlations?
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{cc}
+		Layer 1 & -0.30 \\
+		Layer 2 & -0.24 \\
+		Layer 3 & -0.15
+	\end{tabular}
+	\caption{Spearman's rank correlation between cosine similarity and edit distance} % bad title
+\end{table}
+
+\subsection{Shared sequences}
+In this experiment we looked at the positions of phoneme strings that were shared by sentences from the validation set of MS COCO and their nearest neighbours. We determined each sentences' nearest neighbour for each hidden layer in {\sc Stacked GRU}. The nearest neighbour is the sentence for which the activation vector at the end of sentence symbol has the smallest cosine distance to the activation vector of the original sentence. The position of matching subsequences is the average position in the original sentence of characters in substrings that are shared by the neighbour sentences, counted from the end of the sentence [with minimum length 2?]. A high mean average substring position thus means that the shared substring(s) appear early in the sentence. This gives an indirect measure of the timescale at which the different layers operate. 
+
+As can be read from Table 4, the average position of shared substrings in neighbour sentences is lowest for the first hidden layer, higher for the middle layer, and even higher for the last hidden layer. This indicates a difference between the layers with regards to the timescale they represent. Whereas in the lowest layer information from the latest timesteps is most explanatory for the current activation vector, in the second hidden layer a larger timescale is taken into account, and in the third hidden layer the timescale is even larger. 
+
+[Example: pair of sentences for each layer
+highlighted shared substrings, with positions aligned ]
 
 \begin{table}[]
 	\centering
 	\begin{tabular}{ccc}
-		{\sc Stacked GRU} & Layer 1 & 0.09 \\
-		& Layer 2 & 0.21 \\
-		& Layer 3 & 0.28 \\
-			\hline
-		{\sc Word GRU} & & 0.48 \\
-			\hline
-		{\sc Word Vector Sum} & & 0.42
+		Layer 1 & 12.09 \\
+		Layer 2 & 14.90 \\
+		Layer 3 & 16.80
 	\end{tabular}
-	\caption{Spearman's rank correlation between cosine similarity and human similarity judgements} % bad title
+	\caption{Average position of shared subsequences between sentences and their nearest neighbour}
 \end{table}
-
-[regression analysis on similarity judgements including edit distances goes here]
-% report on lev and stuff... LOTS TO DO
-% expected relation: when one of the words is frequent and the other is not, lev is predictive. if both are infrequent, it may be predictive too because they are both similar to a third word. However if both are frequent, lev is not as predictive. This is impossible to test on current data.
-
-\subsection{Word similarity: replacement}
-The experiment previously described takes cosine similarity between the activations of the last hidden layer as a measure of word similarity, in analogy to how similarity of word embeddings is commonly quantified. However, the last hidden layer of our model is very different to an embedding layer. Its task is to integrate information over a whole sentence, as a basis for predicting features of the visual scene it describes. In the current experiment, the difference between two words is how much the prediction of the visual scene changes when one word replaces the other. % niet waar je pakt de laatste hidden layer, niet de uiteindelijke voorspelling
-The input data were sentences from the validation part of the MEN dataset that contained one of the words of each word pair in the MEN dataset. %
-the word that got it selected, was replaced by its counterpart from the MEN dataset. The resulting sentence was transcribed phonetically. Similarity of the sentences was measured by taking the cosine similarity between the activation vector of the highest hidden layer at the end-of-sentence symbol for the original sentence and the sentence in which the original word had been replaced. The similarity score of a word pair was the average similarity of the sentence pairs. % something about this perhaps not being simmetric? 
-
