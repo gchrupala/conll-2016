@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
+\usepackage{tipa}
 %\emnlpfinalcopy
 
 %  Enter the EMNLP Paper ID here:
@@ -15,8 +16,8 @@
 %\setlength\titlebox{5cm}
 
 % How about this:
-\title{Levels of representation in a Stacked Gated Recurrent Neural
-  Network model of visually-grounded language learning}
+\title{From phonemes to images: levels of representation in a recurrent neural
+model of visually-grounded language learning}
 \author{Lieke Gelderloos \\
   Tilburg University \\
   {\tt l.j.gelderloos@uvt.nl} \And
@@ -29,9 +30,9 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-We present {Phoneme GRU}, an architecture composed of stacked Gated Recurrent Units that learns to predict visual features given an image caption in the form of a sequence of phonemes. Although the language input consists of low-level symbolic input rather than a continuous speech signal, the learning task resembles that human language learners in that the learner discovers both structure and meaning from noisy and ambiguous data accross modalities. We show that {\sc Phoneme GRU} indeed learns to predict features of the visual context given phonetically transcribed image captions, and show that it represents linguistic structure in a hierarchical manner: lower layers in the stack are comparatively more sensitive to form, whereas higher layers are more sensitive to meaning.
-
+We present a model of visually-grounded language learning based on stacked gated recurrent neural networks which learns to predict visual features given an image description in the form of a sequence of phonemes. The learning task resembles that faced by human language learners who need to discover both structure and meaning from noisy and ambiguous data across modalities. We show that our model indeed learns to predict features of the visual context given phonetically transcribed image descriptions, and show that it represents linguistic information in a hierarchy of levels manner: lower layers in the stack are comparatively more sensitive to form, whereas higher layers are more sensitive to meaning.
 \end{abstract}
+
 
 \input{intro.tex}
 \input{related.tex}
