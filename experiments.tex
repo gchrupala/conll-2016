@@ -30,7 +30,7 @@ Prediction accuracy of the logistic regression model based on the activation pat
 \end{table}
 
 
-\subsection{Word Similarity}
+\subsection{Word similarity}
 To understand the encoding of semantic information in {\sc Stacked GRU}, we analysed the cosine similarity of activation vectors for word pairs from the MEN dataset, and compared them to human similarity judgements.
 For each word pair in the MEN dataset, the words were transcribed phonetically using eSpeak and then fed to {\sc Stacked GRU} individually. For comparison, the words were also fed to {\sc Word GRU} and {\sc Word Sum}. Word pair similarity was quantified as the cosine similarity between the activation patterns of the hidden layers at the end-of-sentence symbol.
 In contrast to {\sc Word GRU} and {\sc Word Sum}, {\sc Stacked GRU} has access to the word forms. To explore the role of phonemic form in word similarity, a measure of phonemic difference was included: the Levenshtein distance between the phonetic transcriptions of the two words, normalized by dividing it by the length of the longer transcription. 
