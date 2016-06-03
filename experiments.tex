@@ -1,7 +1,7 @@
 \section{Experiments}
 \label{sec:experiments}
 
-For all experiments, the models were trained on the training set of MS COCO. Textual input was transcribed phonetically automatically using the default English voice of eSpeak for use with the {\sc Phoneme GRU} models. Stress and pause markers were cleaned out, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. Visual input for all models consists of % Dscribe visual input!!!!
+For all experiments, the models were trained on the training set of MS COCO. Textual input was transcribed phonetically automatically using the default English voice of eSpeak for use with the {\sc Phoneme GRU} models. Stress and pause markers were cleaned out, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. Visual input for all models consists of activation vectors of the pre-softmax layer of the 16-layer CNN described in \newcite{simonyan2014very}.
 \input{visual}
 \subsection{Word boundary prediction}
 To explore the sensitivity of the {\sc Phoneme GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. A logistic regression model was trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks. The features available to these models were positional phoneme \textit{n}-grams in the range 1 - \textit{n}. Both the \textit{n}-gram models and hidden state models were implemented using scikitlearn implementation with l2-regularization and C set to 1000. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the actual location of word boundaries. However, eSpeak models some coarticulation effects that sometimes leads to word boundaries disappearing from the transcription.
@@ -48,11 +48,11 @@ Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher 
 		\hline
 		{\sc Word Sum} & & 0.42 & 0.56
 	\end{tabular}
-	\caption{Spearman's rank correlation between cosine similarity and human similarity judgements. All correlations are significant at \textit{p} < 0.05.} % bad title
+	\caption{Spearman's rank correlation coefficient between cosine similarity and human similarity judgements. All correlations significant at \textit{p} < 0.05.} % bad title
 \end{table}
 
 Table 3 shows Spearman's rank correlation coefficient between the edit distance and the cosine similarity of activation vectors at the hidden layers of {\sc Stacked GRU}.
-As is to be expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words that are more similar in form are also more similar in meaning. Note that in the MEN dataset, meaning and word form are indeed correlated: human similarity judgements and edit distance are correlated at -0.08. The correlation is strongest at the lowest hidden layer and weakest, though still present and stronger than for human judgements, at the third hidden layer. 
+As is to be expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words that are more similar in form are also more similar in meaning. Note that in the MEN dataset, meaning and word form are indeed correlated: human similarity judgements and edit distance are correlated at -0.08 (\textit{p} < 0.05). The correlation is strongest at the lowest hidden layer and weakest, though still present and stronger than for human judgements, at the third hidden layer. 
 The correlations of cosine similarities with edit distance on the one hand, and human similarity rating on the other hand, indicate that the different hidden layers reflect increasing levels of representation: whereas at the lowest level mostly encodes information about form, the highest layer mostly encodes semantic information.
 
 \begin{table}[]
@@ -62,7 +62,7 @@ The correlations of cosine similarities with edit distance on the one hand, and 
 		Layer 2 & -0.24 \\
 		Layer 3 & -0.15
 	\end{tabular}
-	\caption{Spearman's rank correlation between cosine similarity and edit distance} % bad title
+	\caption{Spearman's rank correlation coefficient between cosine similarity and edit distance. All correlations significant at \textit{p} < 0.05.} % bad title
 \end{table}
 
 \subsection{Shared sequences}
@@ -79,5 +79,5 @@ highlighted shared substrings, with positions aligned ]
 		Layer 2 & 14.90 \\
 		Layer 3 & 16.80
 	\end{tabular}
-	\caption{Average position of shared subsequences between sentences and their nearest neighbour}
+	\caption{Average position of symbols in shared subsequences between nearest neighbour sentences}
 \end{table}
