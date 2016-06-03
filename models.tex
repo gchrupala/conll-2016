@@ -1,8 +1,8 @@
 \section{Models}
 \label{sec:models}
 
-\subsection{Phoneme Stacked GRU}
-The architecture of our main model of interest, {\sc Stacked GRU} is
+\subsection{Phon GRU}
+The architecture of our main model of interest, {\sc Phon GRU} is
 schematically depicted in Figure \ref{fig:architecture} and consists of a phoneme
 encoding  layer, followed by a stack of $K$ Gated Recurrent Neural
 nets, followed by densely connected layer which maps the last hidden
@@ -87,7 +87,7 @@ activations:
 \sigma(z) = \mathrm{clip(0.5(z+\mathrm{abs}(z)), 0, 5)}
 \]
 
-There are two more components of our {\sc Stacked GRU} model: the
+There are two more components of our {\sc Phon GRU} model: the
 phoneme encoding layer, and mapping from the final state of the top GRU
 layer to the image feature vector.
 The phoneme encoding layer is a simply a lookup table $\mathbf{E}$ whose
@@ -105,17 +105,17 @@ to the vector of image features using a fully connected layer:
 \end{equation}
 
 Our main interest lies in  recurrent phoneme-level modeling. However in order to
-put the performance of the phoneme-level {\sc Stacked GRU} into
+put the performance of the phoneme-level {\sc Phon GRU} into
 perspective we compare it to the following two other models.
 
 
 \subsection{Word GRU}
-The architecture of this model is the same as {\sc Stacked GRU} with
+The architecture of this model is the same as {\sc Phon GRU} with
 the difference that we use words instead of phonemes as input symbols,
 use learnable word embeddings instead of fixed one-hot phoneme
 encodings, and reduce the number of layers in the GRU stack. See
 \ref{sec:experiments} for details.
-\subsection{Word Vector Sum}
+\subsection{Word Sum}
 The second model we use for comparison is word-based non-sequential
 model, consisting of a word embedding matrix, a vector sum operator,
 and a mapping to the image vector feature vector:

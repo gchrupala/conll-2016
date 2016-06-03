@@ -1,7 +1,8 @@
 \subsection{Prediction of visual features}
+\label{subsec:visual}
 For the experiments on the prediction of visual features all models
-were trained on the training set of MS COCO. As validation data we
-used a random sample of 5000 images from the MS COCO validation set. 
+were trained on the training set of MS COCO. As validation and test data we
+used a random sample of 5000 images each from the MS COCO validation set. 
 
 Figure~\ref{fig:loss} shows the value of the validation average cosine distance
 between the predicted visual vector and the target vector for three
@@ -10,7 +11,7 @@ random initializations of each of the model types.
 The Phonetic GRU model is more sensitive to the initialization: one
 can clearly distinguish three separate trajectories. The word-level models
 are much less affected by random initialization. In terms of the
-overall performance, the {\sc Phoneme GRU} model falls between the
+overall performance, the {\sc Phon GRU} model falls between the
 {\sc Word Sum} model and th {\sc Word GRU} model.
 
 \begin{figure}
@@ -31,20 +32,19 @@ was used to describe (even though often many other images are also
 good matches to the sentence). 
 
 In Figure~\ref{fig:accat5} we report the validation accuracies on this
-task for the two word-level models, as well as for the Phoneme GRU
+task for the two word-level models, as well as for the Phon GRU
 model with different number of hidden layers. We trained each model
 version with three random initializations for each model setting, and
 evaluate after each epoch. We report the score of the best epoch for
 each initialization. 
 The overall ranking of the models matches the direct
 evaluation of the loss function above: the phoneme-level models are in
-between the two word-level models. Phoneme GRU with three
+between the two word-level models. Phon GRU with three
 hidden layers is the best of the phoneme-level model.
 
 In Table~\ref{tab:accat5test} we show the accuracies of the best
 version of each of the models types on the test images; these are also
-the model versions used in all subsequent experiments. The accuracy at
-5 for the {\sc Word GRU} is comparable to what
+the model versions used in all subsequent experiments. The accuracy @ 5 for the {\sc Word GRU} is comparable to what
 \newcite{chrupala2015learning} report for their multitask {\sc Imaginet}
 model, whose visual pathway has the same structure.
 
@@ -66,7 +66,7 @@ model, whose visual pathway has the same structure.
     {\sc Phon GRU} & 0.180 \\
   \end{tabular}
   \caption{Image retrieval accuracy at 5 on test data for the versions of {\sc Word
-      Sum}, {\sc Word GRU} and {\sc Phoneme GRU} chosen by
+      Sum}, {\sc Word GRU} and {\sc Phon GRU} chosen by
     validation.}
   \label{tab:accat5test}
 \end{table}
