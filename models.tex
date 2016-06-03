@@ -66,7 +66,7 @@ sequence of inputs to a sequence of states:
 where $\mathbf{X}$ stands for the matrix composed of input column vectors
 $\mathbf{x}_1, \ldots, \mathbf{x}_n$. Two or more GRU layers can be composed into a stack: 
 \begin{equation}
-\mathrm{GRU}_2(\mathrm{GRU}_1(\mathbf{X}, {\mathbf{h}_{0}}_{1}), {\mathbf{h}_{0}}_{2}).
+\mathrm{GRU}_2(\mathrm{GRU}_1(\mathbf{X}, {\mathbf{h_1}}_{0}), {\mathbf{h_2}}_{0}).
 \end{equation}
 In our version of the Stacked GRU architecture we use {\it residualized} layers:
 \begin{equation}
@@ -97,11 +97,11 @@ encoding matrix and produces the input column vector:
 \begin{equation}
   \mathbf{x}_t = \mathbf{E}[:,p_t].
 \end{equation}
-Finally, we map the final state of the top GRU layer ${\mathbf{h}_K}_n$
+Finally, we map the final state of the top GRU layer ${\mathbf{h_K}}_n$
 to the vector of image features using a fully connected layer:
 
 \begin{equation}
-  \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h}_K}_n
+  \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h_K}}_n
 \end{equation}
 
 Our main interest lies in  recurrent phoneme-level modeling. However in order to

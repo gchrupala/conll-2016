@@ -25,30 +25,51 @@ We also evaluated the models on how well they perform when used to
 search images: for each validation sentence the model was used to predict the
 visual vector. The image vectors in the validation data were then
 ranked by cosine similarity to the predicted vector, and the
-proportion of times the correct image was among the top 3 was
+proportion of times the correct image was among the top 5 was
 reported. By {\it correct} image we mean the one which the sentence
 was used to describe (even though often many other images are also
 good matches to the sentence). 
 
-In Figure~\ref{fig:accat5} we report the accuracies on this task for
-the two word-level models, as well as for the Phoneme GRU model with
-different number of hidden layers. We trained each model version with
-three random initializations for each model setting, and evaluate
-after each epoch. We report the score of the best epoch for each
-initialization. The overall ranking of the models matches the direct
+In Figure~\ref{fig:accat5} we report the validation accuracies on this
+task for the two word-level models, as well as for the Phoneme GRU
+model with different number of hidden layers. We trained each model
+version with three random initializations for each model setting, and
+evaluate after each epoch. We report the score of the best epoch for
+each initialization. 
+The overall ranking of the models matches the direct
 evaluation of the loss function above: the phoneme-level models are in
-between the two word-level models. Phoneme GRU with three hidden
-layers is the best of the phoneme-level model. This model achieved the
-maximum score after 8 epochs. In subsequent experiments we use these
-particular model parameters when reporting other results with {\sc
-  Phoneme GRU}.
+between the two word-level models. Phoneme GRU with three
+hidden layers is the best of the phoneme-level model.
+
+In Table~\ref{tab:accat5test} we show the accuracies of the best
+version of each of the models types on the test images; these are also
+the model versions used in all subsequent experiments. The accuracy at
+5 for the {\sc Word GRU} is comparable to what
+\newcite{chrupala2015learning} report for their multitask {\sc Imaginet}
+model, whose visual pathway has the same structure.
+
 
 \begin{figure}
   \centering
   \includegraphics[scale=0.25]{accat5.pdf}
-  \caption{Accuracy at 5 on the image retrieval task}
+  \caption{Validation accuracy at 5 on the image retrieval task.}
   \label{fig:accat5}
 \end{figure}
+
+
+\begin{table}
+  \centering
+  \begin{tabular}{l|r}
+    Model & Accuracy @ 5 \\\hline
+    {\sc Word Sum} & 0.158 \\
+    {\sc Word GRU} & 0.205 \\
+    {\sc Phon GRU} & 0.180 \\
+  \end{tabular}
+  \caption{Image retrieval accuracy at 5 on test data for the versions of {\sc Word
+      Sum}, {\sc Word GRU} and {\sc Phoneme GRU} chosen by
+    validation.}
+  \label{tab:accat5test}
+\end{table}
 
 % \begin{table}
 %   \centering

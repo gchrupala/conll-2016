@@ -4,17 +4,20 @@
 Children acquire their native language with little and weak
 supervision, exploiting noisy correlations between speech, visual, and
 other sensory signals, as well as via feedback from interaction with
-their peers and parents. Computationally modeling this ability has
-been the focus of much research, under scenarious simplified
-in a variety of ways, for example:
-
+their peers and parents. Understanding this process is an important
+scientific challenge in its own right, but it also has a potential to
+generate insights useful in engineering efforts to design
+conversational agents or robots. Computationally modeling the ability
+to learn linguistic form-meaning pairings has been the focus of much
+research, under scenarios simplified in a variety of ways, for
+example:
 \begin{itemize}
 \item distributional learning from pure word-word co-occurrences with
   no perceptual grounding \cite{landauer1998introduction,kiros2015skip};
 \item cross-situational learning with word sequences and sets of
   symbols representing sensory input
   \cite{siskind.96,fazly.etal.10csj};
-\item cross-situational learning using sensory speech and visual
+\item cross-situational learning using sensory audio and visual
   input, but with extremely limited sets of words and objects
   \cite{Roy2002113,iwahashi2003language}.
 \end{itemize}
@@ -27,24 +30,30 @@ process trained on images paired with their descriptions
 of the {\it visual scene} consists of pixel-level perceptual data, the
 {\it linguistic} input consists of sentences segmented into discrete
 word symbols. In this paper we take a step towards addressing this
-major limitation, by using the phonetic representation of input
+major limitation, by using the phonetic transcription of input
 utterances. While this type of input is symbolic rather than
 perceptual, it goes a long way toward making the setting more
 naturalistic, and the acquisition problem more challenging: the
-learner needs to discover structure corresponding to morphemes, words
+learner may need to discover structure corresponding to morphemes, words
 and phrases in an unsegmented string of phonemes, and the length of
-the dependencies that need to be detected grows substantially.
+the dependencies that need to be detected grows substantially when
+compared to word-level models.
 
-We implement a simple architecture based on stacked recurrent neural
-networks with Gated Recurrent Units \cite{chung2014empirical}: our
-model processes the utterance phoneme by phoneme while building a
-distributed low dimensional representation through a series of
-recurrent layers. Once it reaches the end of the utterance it attempts
-to predict the features of the corresponding visual scene. We train
-this model on a phonetically transcribed version of MS-COCO
-\cite{lin2014microsoft} and show that it is able to successfully learn
-to understand aspects of sentence meaning from the visual signal, and 
-exploits temporal structure in the input. We also show that different
-levels in the stack of recurrent layers represent different aspects of
-linguistic structure: low levels are comparatively more sensitive to
-form, and higher levels to visually salient elements of meaning.
+\paragraph{Our contributions}
+
+We design and implement a simple architecture based on stacked
+recurrent neural networks with Gated Recurrent Units
+\cite{chung2014empirical}: our model processes the utterance phoneme
+by phoneme while building a distributed low dimensional representation
+through a series of recurrent layers. Once it reaches the end of the
+utterance it attempts to predict the features of the corresponding
+visual scene. We train this model on a phonetically transcribed
+version of MS-COCO \cite{lin2014microsoft} and show that it is able to
+successfully learn to understand aspects of sentence meaning from the
+visual signal, and exploits temporal structure in the input. In a
+number of experiments we show that different levels in the stack of
+recurrent layers represent different aspects of linguistic
+structure. Low levels focus on local, short time-scale portions of the
+input sequence, and are comparatively more sensitive to form. The top
+level encodes global aspects of the input sequence and is sensitive to
+visually salient elements of its meaning.
