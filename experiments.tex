@@ -38,15 +38,16 @@ Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher 
 
 \begin{table}[]
 	\centering
-	\begin{tabular}{cccc}
-		&& All word pairs & Pairs of frequent words \\
-		{\sc Phoneme GRU} & Layer 1 & 0.09 & 0.12\\
-		& Layer 2 & 0.21 & 0.33 \\
-		& Layer 3 & 0.28 & 0.45 \\
+	\begin{tabular}{ccc}
+		& All word pairs & Pairs of frequent words \\
+		{\sc Phoneme GRU} 
+		\multicolumn{1}{|r|}{Layer 1} & 0.09 & 0.12\\
+		\multicolumn{1}{|r|}{Layer 2} & 0.21 & 0.33 \\
+		\multicolumn{1}{|r|}{Layer 3}& 0.28 & 0.45 \\
 		\hline
-		{\sc Word GRU} & & 0.48 & 0.60\\
+		{\sc Word GRU} & 0.48 & 0.60\\
 		\hline
-		{\sc Word Sum} & & 0.42 & 0.56
+		{\sc Word Sum} & 0.42 & 0.56
 	\end{tabular}
 	\caption{Spearman's rank correlation coefficient between cosine similarity and human similarity judgements. All correlations significant at \textit{p} < 0.05.} % bad title
 \end{table}
