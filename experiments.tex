@@ -31,7 +31,7 @@ Most of the details of the three model types and training hyperparameters were a
 To explore the sensitivity of the {\sc Phon GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. A logistic regression model was trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks, with positional phoneme \textit{n}-grams in the range 1-\textit{n}. Both the \textit{n}-gram models and hidden state models were implemented using Scikit-learn \cite{scikit-learn} {\tt LogisticRegression} implementation with L2-regularization and the $C$ parameter set to 1000. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the location of word boundaries according to conventional English spelling. However, eSpeak models some coarticulation effects which sometimes leads to word boundaries disappearing from the transcription. For example, {\it bank of a river} is transcribed as \textipa{[baNk @v@ \*rIv@]}.
 %[example of a phonetic transcription with 'ova']
 
-Accuracy scores reported in Table~\ref{tab:boundary} are the averages over 5-fold cross-validation on the captions of 5000 images from the validation portion of MS COCO. The proportion of phonemes preceding a word boundary is 0.29, meaning that predicting {\it no word boundary} by default would be correct in 0.71 of cases. At the highest hidden layer, enough information about the word form is available to correctly predict word end in 0.82 of cases - substantially above the majority baseline. The lower levels allow for more accurate prediction of word boundaries: 0.86 at the middle hidden layer, and 0.88 at the bottom level. 
+Accuracy scores reported in Table~\ref{tab:boundary} are the averages over 5-fold cross-validation on the captions of 5000 images from the validation portion of MS COCO. The proportion of phonemes preceding a word boundary is 0.29, meaning that predicting {\it no word boundary} by default would be correct in 0.71 of cases. At the highest hidden layer, enough information about the word form is available for correct prediction in 0.82 of cases - substantially above the majority baseline. The lower levels allow for more accurate prediction of word boundaries: 0.86 at the middle hidden layer, and 0.88 at the bottom level. 
 Prediction accuracy of the logistic regression model based on the activation patterns of the lowest hidden layer is comparable to that of a bigram logistic regression model.
 
 These results indicate that information on sub-word structure is only partially encoded by {\sc Phon GRU}, and is mostly absent by the time the signal from the input propagates to the top layer. The bottom layer does learn to encode a fair amount of word boundary information, but the prediction score substantially below 100\% indicates that it is rather selective. 
@@ -76,13 +76,13 @@ Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher 
 	\end{tabular}
 	\caption{Spearman's correlation coefficient between
           word-word cosine similarity and human similarity judgements. All
-          correlations significant at \textit{p} $< 0.01$. Frequent
+          correlations significant at \textit{p} $< 1\mathrm{e}{-4}$. Frequent
           words appear at least 100 times in the training data.} 
 \label{tab:human}
 \end{table*}
 
 Table~\ref{tab:edit} shows Spearman's rank correlation coefficient between the edit distance and the cosine similarity of activation vectors at the hidden layers of {\sc Phon GRU}.
-As expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words which are more similar in form are also more similar according to the model. (Note that in the MEN dataset, meaning and word form are also (weakly) correlated: human similarity judgements and edit distance are correlated at -0.08 (\textit{p} $<$ 0.05).)
+As expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words which are more similar in form are also more similar according to the model. (Note that in the MEN dataset, meaning and word form are also (weakly) correlated: human similarity judgements and edit distance are correlated at -0.08 (\textit{p} $< 1\mathrm{e}{-5}$).)
 
 The negative correlation between edit distances and cosine similarities is strongest at the lowest hidden layer and weakest, though still present and stronger than for human judgements, at the third hidden layer. 
 
@@ -97,7 +97,7 @@ The correlations of cosine similarities with edit distance on the one hand, and 
 		      3 & $-0.15$
 	\end{tabular}
 	\caption{Spearman's rank correlation coefficient between
-          {\sc Phon GRU} cosine similarity and phoneme-level edit distance. All correlations significant at \textit{p} $< 0.01$.} 
+          {\sc Phon GRU} cosine similarity and phoneme-level edit distance. All correlations significant at \textit{p} $< 1\mathrm{e}{-15}$.} 
 \label{tab:edit}
 \end{table}
 
@@ -116,7 +116,7 @@ As can be seen in Table~\ref{tab:substrings}, the average position of shared sub
     A metallic {\bf bench} on a path in the {\bf park} \\
     A stone park {\bf bench} sitting in an empty green {\bf park}\\ \hline
   \end{tabular}
-  \caption{An illustrative sentence with its nearest neighbor at layer 1 and layer 3. For readability, sentences are displayed in conventional spelling, and only highlight matching substrings of length $\geq3$. In reality we used phonetic transcriptions to compute shared substring positions, and used substrings of all lengths. }
+  \caption{An illustrative sentence with its nearest neighbour at layer 1 and layer 3. For readability, sentences are displayed in conventional spelling, and only highlight matching substrings of length $\geq3$. In reality we used phonetic transcriptions to compute shared substring positions, and used substrings of all lengths. }
 \label{fig:example-shared}
 \end{figure}
 
@@ -130,7 +130,7 @@ As can be seen in Table~\ref{tab:substrings}, the average position of shared sub
 		      3 & 16.8 \\
 	\end{tabular}
 	\caption{Average position of symbols in shared substrings
-          between nearest neighbour sentences according to Phon GRU
+          between nearest neighbour sentences according to {\sc Phon GRU}
           representations at the different layers. Positions are indexed from
           end of string, i.e. index 0 is the last symbol.}
 \label{tab:substrings}
