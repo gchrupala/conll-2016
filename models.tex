@@ -1,5 +1,4 @@
 \section{Models}
-\label{sec:models}
 
 \subsection{Phon GRU}
 The architecture of our main model of interest, {\sc Phon GRU} is
@@ -104,10 +103,9 @@ to the vector of image features using a fully connected layer:
   \hat{\mathbf{i}} = \mathbf{I} {\mathbf{h_K}}_n
 \end{equation}
 
-Our main interest lies in  recurrent phoneme-level modeling. However in order to
+Our main interest lies in recurrent phoneme-level modeling. However, in order to
 put the performance of the phoneme-level {\sc Phon GRU} into
-perspective we compare it to the following two other models.
-
+perspective, we compare it to two word-level models. The performance of these models should not be seen as a baseline, as they exploit information that is unavailable to {\sc Phon GRU}: the identity of words is unambiguous to them.
 
 \subsection{Word GRU}
 The architecture of this model is the same as {\sc Phon GRU} with

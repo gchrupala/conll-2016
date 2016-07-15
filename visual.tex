@@ -1,5 +1,6 @@
 \subsection{Prediction of visual features}
 \label{subsec:visual}
+The models are trained and evaluated on the prediction of visual feature vectors from captions. We are not devising an image retrieval method, but this task reflects the ability to extract visually salient semantic information from language.
 For the experiments on the prediction of visual features all models
 were trained on the training set of MS COCO. As validation and test data we
 used a random sample of 5000 images each from the MS COCO validation set. 
@@ -39,8 +40,8 @@ evaluate after each epoch. We report the score of the best epoch for
 each initialization. 
 The overall ranking of the models matches the direct
 evaluation of the loss function above: the phoneme-level models are in
-between the two word-level models. Phon GRU with three
-hidden layers is the best of the phoneme-level model.
+between the two word-level models. {\sc Phon GRU} with three
+hidden layers is the best of the phoneme-level models.
 
 In Table~\ref{tab:accat5test} we show the accuracies of the best
 version of each of the models types on the test images; these are also
