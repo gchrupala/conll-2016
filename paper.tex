@@ -8,6 +8,7 @@
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{tipa}
+\usepackage{sidecap}
 %\emnlpfinalcopy
 
 %\setlength\titlebox{5cm}
@@ -27,6 +28,9 @@ model of visually-grounded language learning}
 \date{}
 
 \begin{document}
+\setlength{\abovedisplayskip}{0.5em}
+\setlength{\belowdisplayskip}{0.5em}
+\setlength{\belowcaptionskip}{-10pt}
 \maketitle
 \begin{abstract}
 We present a model of visually-grounded language learning based on stacked gated recurrent neural networks which learns to predict visual features given an image description in the form of a sequence of phonemes. The learning task resembles that faced by human language learners who need to discover both structure and meaning from noisy and ambiguous data across modalities. We show that our model indeed learns to predict features of the visual context given phonetically transcribed image descriptions, and show that it represents linguistic information in a hierarchy of levels: lower layers in the stack are comparatively more sensitive to form, whereas higher layers are more sensitive to meaning.

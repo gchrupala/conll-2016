@@ -13,6 +13,7 @@ research, under scenarios simplified in a variety of ways, for
 example:
 
 \begin{itemize}
+\setlength\itemsep{-0.5em}
 \item distributional learning from pure word-word co-occurrences with
   no perceptual grounding \cite{landauer1998introduction,kiros2015skip};
 \item cross-situational learning with word sequences and sets of
@@ -45,10 +46,13 @@ compared to word-level models.
 We design and implement a simple architecture based on stacked
 recurrent neural networks with Gated Recurrent Units
 \cite{chung2014empirical}: our model processes the utterance phoneme
-by phoneme while building a distributed low dimensional representation
-through a series of recurrent layers. Once it reaches the end of the
-utterance it attempts to predict the features of the corresponding
-visual scene. We train this model on a phonetically transcribed
+by phoneme while building a distributed low dimensional semantic
+representation through a series of recurrent layers.  The model learns
+by projecting its sentence representation to image
+space and comparing it to the features of the corresponding visual
+scene.
+
+We train this model on a phonetically transcribed
 version of MS-COCO \cite{lin2014microsoft} and show that it is able to
 successfully learn to understand aspects of sentence meaning from the
 visual signal, and exploits temporal structure in the input. In a

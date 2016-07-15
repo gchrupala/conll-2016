@@ -16,11 +16,19 @@ overall performance, the {\sc Phon GRU} model falls between the
 {\sc Word Sum} model and the {\sc Word GRU} model.
 
 \begin{figure}
-  \centering
-  \includegraphics[scale=0.3]{loss-zoom.pdf}
-  \caption{Value of the loss function on validation data during
-    training. Three random initialization of each model are shown.}
-  \label{fig:loss}
+    \centering
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.3]{loss-zoom.pdf}
+    \caption{Value of the loss function on validation data during
+      training. Three random initialization of each model are shown.}
+    \label{fig:loss}
+  \end{minipage}
+\hspace{0.3cm}
+  \begin{minipage}{0.45\textwidth}
+    \includegraphics[scale=0.25]{accat5.pdf}
+    \caption{Validation accuracy at 5 on the image retrieval task.}
+    \label{fig:accat5}
+  \end{minipage}
 \end{figure}
 
 We also evaluated the models on how well they perform when used to
@@ -49,28 +57,6 @@ the model versions used in all subsequent experiments. The accuracy @ 5 for the 
 \newcite{chrupala2015learning} report for their multitask {\sc Imaginet}
 model, whose visual pathway has the same structure.
 
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.25]{accat5.pdf}
-  \caption{Validation accuracy at 5 on the image retrieval task.}
-  \label{fig:accat5}
-\end{figure}
-
-
-\begin{table}
-  \centering
-  \begin{tabular}{l|r}
-    Model & Accuracy @ 5 \\\hline
-    {\sc Word Sum} & 0.158 \\
-    {\sc Word GRU} & 0.205 \\
-    {\sc Phon GRU} & 0.180 \\
-  \end{tabular}
-  \caption{Image retrieval accuracy at 5 on test data for the versions of {\sc Word
-      Sum}, {\sc Word GRU} and {\sc Phon GRU} chosen by
-    validation.}
-  \label{tab:accat5test}
-\end{table}
 
 % \begin{table}
 %   \centering

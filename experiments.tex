@@ -3,21 +3,14 @@
 
 For all experiments, the models were trained on the training set of MS COCO. Textual input for the {\sc Phon GRU} models was transcribed automatically using the grapheme-to-phoneme functionality with the default English voice of the eSpeak speech synthesis toolkit.\footnote{Available at \url{http://espeak.sourceforge.net}} Stress and pause markers were removed, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. See Figure~\ref{fig:ipa} for an example transcription.
 
-\begin{figure}
-  \centering
-  \begin{tabular}{|l|}\hline
-    \includegraphics[scale=0.7]{woman-ipa.png} \\
-    A young woman riding a horse holding a flag\\\hline
-  \end{tabular}
-  \caption{Example of a postprocessed phonetic transcription output
-    from eSpeak used as input to the {\sc Phon GRU} model.}
-  \label{fig:ipa}
-\end{figure}
 
 Visual input for all models was obtained by forwarding images through the 16-layer convolutional neural network described in \newcite{simonyan2014very} pre-trained on Imagenet \cite{ILSVRCarxiv14}, and recording the activation vectors of the pre-softmax layer. The z-score transformation was applied to these features to ease optimization. 
 
-Most of the details of the three model types and training hyperparameters were adopted from related work, and adapted via informal exploration. Full exploration of the search space was unfeasible due to the large number of adjustable settings in these models and their long running time. Given the importance of depth for our purposes, we did systematically explore the number of layers in the {\sc Phon GRU} and {\sc Word GRU} models. A single layer is optimal for {\sc Word GRU}. For {\sc Phon GRU}, see Section~\ref{subsec:visual} below. Other important settings were as follows:
+Most of the details of the three model types and training
+hyperparameters were adopted from related work, and adapted via
+informal exploration. Full exploration of the search space was not feasible due to the large number of adjustable settings in these models and their long running time. Given the importance of depth for our purposes, we did systematically explore the number of layers in the {\sc Phon GRU} and {\sc Word GRU} models. A single layer is optimal for {\sc Word GRU}. For {\sc Phon GRU}, see Section~\ref{subsec:visual} below. Other important settings were as follows:
 \begin{itemize}
+\setlength\itemsep{-0.5em}
 \item All models: Implemented in Theano \cite{Bastien-Theano-2012}, optimized with 
   Adam \cite{DBLP:journals/corr/KingmaB14}, initial learning rate of 0.0002, minibatch size
   of 64, gradient norm clipped to 5.0.
@@ -37,24 +30,47 @@ Prediction scores of the logistic regression model based on the activation patte
 
 These results indicate that information on sub-word structure is only partially encoded by {\sc Phon GRU}, and is mostly absent by the time the signal from the input propagates to the top layer. The bottom layer does learn to encode a fair amount of word boundary information, but the prediction score substantially below 100\% indicates that it is rather selective. 
 
-\begin{table}[]
-	\centering
-	\begin{tabular}{lrrrr}
-		\textbf{Model} & & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} \\
-		\hline
-		Majority baseline & & 0.71 & & \\
-		\hline
-		Phon GRU & Layer 1 & 0.88 & 0.82 & 0.78 \\
-		& Layer 2 & 0.86 & 0.79 & 0.71 \\
-		& Layer 3 &  0.82 & 0.74 & 0.60 \\
-		\hline
-		\textit{n}-gram & \textit{n} = 1 & .80 & .79 & .41 \\
-		& \textit{n} = 2 & 0.87 & 0.79 & 0.78 \\
-		& \textit{n} = 3 & 0.93 & 0.86 & 0.90 \\
-		& \textit{n} = 4 & 0.95 & 0.90 & 0.93
-	\end{tabular}
-	\caption{Prediction scores of linear regression models based on activation vectors of {\sc Phon GRU} and on positional \textit{n}-grams}
-\label{tab:boundary}
+\begin{table}[h]
+  \begin{small}
+    \centering
+
+        \begin{minipage}{0.35\textwidth}
+          \centering
+          \begin{tabular}{l|r}
+            Model & Acc @ 5 \\\hline
+            {\sc Word Sum} & 0.158 \\
+            {\sc Word GRU} & 0.205 \\
+            {\sc Phon GRU} & 0.180 \\
+          \end{tabular}
+          \caption{Image retrieval accuracy at 5 on test data for the
+            versions of {\sc Word Sum}, {\sc Word GRU} and {\sc Phon
+              GRU} chosen by validation.}
+          \label{tab:accat5test}
+        \end{minipage}
+        \hspace{0.5cm}
+        \begin{minipage}[r]{0.6\textwidth}
+          \centering
+          \begin{tabular}{lrrrr}
+            \textbf{Model} & & \textbf{Acc} & \textbf{Prec} & \textbf{Rec} \\
+            \hline
+            Majority & & 0.71 & & \\
+            \hline
+            Phon GRU & Layer 1 & 0.88 & 0.82 & 0.78 \\
+                           & Layer 2 & 0.86 & 0.79 & 0.71 \\
+                           & Layer 3 &  0.82 & 0.74 & 0.60 \\
+            \hline
+            \textit{n}-gram & \textit{n} = 1 & 0.80 & 0.79 & 0.41 \\
+                           & \textit{n} = 2 & 0.87 & 0.79 & 0.78 \\
+                           & \textit{n} = 3 & 0.93 & 0.86 & 0.90 \\
+                           & \textit{n} = 4 & 0.95 & 0.90 & 0.93
+          \end{tabular}
+          \caption{Prediction scores of linear regression models based
+            on activation vectors of {\sc Phon GRU} and on positional
+            \textit{n}-grams}
+          \label{tab:boundary}
+        \end{minipage}
+      \end{small}
+
 \end{table}
 
 \subsection{Word similarity}
@@ -65,75 +81,98 @@ In contrast to {\sc Word GRU} and {\sc Word Sum}, {\sc Phon GRU} has access to t
 Table~\ref{tab:human} shows Spearman's rank correlation coefficient between human similarity ratings from the MEN dataset and cosine similarity at the last timestep for all hidden layers. In all layers, the cosine similarities between the activation vectors for two words are significantly correlated with human similarity judgements. The strength of the correlation differs considerably between the layers, ranging from 0.09 in the first layer to 0.28 in the highest hidden layer. The second column in Table~\ref{tab:human} shows the correlations when only taking into account the 1283 word pairs of which both words appear at least 100 times in the training data. 
 Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher than for {\sc Phon GRU}. This is expected given that these are word level models with explicit word-embeddings, while {\sc Phon GRU} builds word representations by forwarding phoneme-level input through several layers of processing.
 
-\begin{table*}[]
-	\centering
-	\begin{tabular}{rrr}
-                          & All words & Frequent words \\\hline
-{\sc Phon GRU} Layer 1 & 0.09 & 0.12\\
-		  Layer 2 & 0.21 & 0.33 \\
-		  Layer 3 & 0.28 & 0.45 \\
-		\hline
-{\sc Word GRU} & 0.48 & 0.60\\	\hline
-{\sc Word Sum} & 0.42 & 0.56
-	\end{tabular}
-	\caption{Spearman's correlation coefficient between
-          word-word cosine similarity and human similarity judgements. All
-          correlations significant at \textit{p} $< 1\mathrm{e}{-4}$. Frequent
-          words appear at least 100 times in the training data.} 
-\label{tab:human}
-\end{table*}
+\begin{table}[h]
+  \begin{small}
+    \begin{minipage}[l]{0.55\textwidth}
+      \centering
+      \begin{tabular}{rrr}
+        & All words & Frequent words \\\hline
+        {\sc Phon GRU} Layer 1 & 0.09 & 0.12\\
+        Layer 2 & 0.21 & 0.33 \\
+        Layer 3 & 0.28 & 0.45 \\
+        \hline
+        {\sc Word GRU} & 0.48 & 0.60\\	\hline
+        {\sc Word Sum} & 0.42 & 0.56
+      \end{tabular}
+      \caption{Spearman's correlation coefficient between word-word
+        cosine similarity and human similarity judgements. All
+        correlations significant at \textit{p} $< 1\mathrm{e}{-4}$.
+        Frequent words appear at least 100 times in the training
+        data.}
+      \label{tab:human}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}[r]{0.4\textwidth}
+      \centering
+      \begin{tabular}{rr}
+        Layer   & $\rho$ \\\hline
+        1 & $-0.30$ \\
+        2 & $-0.24$ \\
+        3 & $-0.15$
+      \end{tabular}
+      \caption{Spearman's rank correlation coefficient between {\sc
+          Phon GRU} cosine similarity and phoneme-level edit
+        distance. All correlations significant at \textit{p}
+        $< 1\mathrm{e}{-15}$.}
+      \label{tab:edit}
+    \end{minipage}
+  \end{small}
+
+\end{table}
 
 Table~\ref{tab:edit} shows Spearman's rank correlation coefficient between the edit distance and the cosine similarity of activation vectors at the hidden layers of {\sc Phon GRU}.
-As expected, edit distance and cosine similarity of the activation vectors are negatively correlated, which means that words which are more similar in form are also more similar according to the model. (Note that in the MEN dataset, meaning and word form are also (weakly) correlated: human similarity judgements and edit distance are correlated at -0.08 (\textit{p} $< 1\mathrm{e}{-5}$).)
+As expected, edit distance and cosine similarity of the activation vectors are negatively correlated: words which are more similar in form are also more similar according to the model.\footnote{Note that in the MEN dataset, meaning and word form are also (weakly) correlated: human similarity judgements and edit distance are correlated at $-0.08$ ($p< 1\mathrm{e}{-5}$).}
 
 The negative correlation between edit distances and cosine similarities is strongest at the lowest hidden layer and weakest, though still present and stronger than for human judgements, at the third hidden layer. 
 
 The correlations of cosine similarities with edit distance on the one hand, and human similarity rating on the other hand, indicate that the different hidden layers reflect increasing levels of representation: whereas at the lowest level mostly encodes information about form, the highest layer mostly encodes semantic information.
 
-\begin{table}[h]
-	\centering
-	\begin{tabular}{rr}
-                Layer   & $\rho$ \\\hline
-		      1 & $-0.30$ \\
-		      2 & $-0.24$ \\
-		      3 & $-0.15$
-	\end{tabular}
-	\caption{Spearman's rank correlation coefficient between
-          {\sc Phon GRU} cosine similarity and phoneme-level edit distance. All correlations significant at \textit{p} $< 1\mathrm{e}{-15}$.} 
-\label{tab:edit}
-\end{table}
 
 \subsection{Position of shared substrings}
-The purpose of this experiment is to quantify the time-scale at which information is retained in the different layers of {\sc Phon GRU}. We thus looked at the location of phoneme strings shared by sentences and their nearest neighbours. Captions of 5000 images from the validation set of MS COCO were included in this experiment. We determined each sentences' nearest neighbour for each hidden layer in {\sc Phon GRU}. The nearest neighbour is the sentence for which the activation vector at the end of sentence symbol has the smallest cosine distance to the activation vector of the original sentence. The position of matching substrings is the average position in the original sentence of symbols in substrings that are shared by the neighbour sentences, counted from the end of the sentence. A high mean average substring position thus means that the shared substring(s) appear early in the sentence. This gives an indirect measure of the timescale at which the different layers operate. Figure~\ref{fig:example-shared} shows an example illustrating this idea. 
+Here we quantify the time-scale at which information is retained in
+the different layers of {\sc Phon GRU}. We looked at the location of
+phoneme strings shared by sentences and their nearest neighbours on
+validation data. 
+We determined each sentences' nearest neighbour for each hidden layer in {\sc Phon GRU}. The nearest neighbour is the sentence for which the activation vector at the end of sentence symbol has the smallest cosine distance to the activation vector of the original sentence. The position of matching substrings is the average position in the original sentence of symbols in substrings that are shared by the neighbour sentences, counted from the end of the sentence. A high mean average substring position thus means that the shared substring(s) appear early in the sentence. This gives an indirect measure of the timescale at which the different layers operate. Table~\ref{tab:example-shared} shows an example.
 
 As can be seen in Table~\ref{tab:substrings}, the average position of shared substrings in neighbour sentences is closest to the end for the first hidden layer and moves towards the beginning of the sentence for the second and third hidden layer. This indicates a difference between the layers with regards to the timescale they represent. Whereas in the lowest layer only information from the latest timesteps is present, the higher layers retain the input  signal over longer timescales.
 
-
-\begin{figure}[h]
-  \begin{tabular}{c}
-    Layer 1 \\\hline
-    A metallic bench {\bf on a path in} the {\bf park} \\
-    A man riding a bicycle {\bf on a path} in a {\bf park} \\\hline
-    Layer 3 \\\hline
-    A metallic {\bf bench} on a path in the {\bf park} \\
-    A stone park {\bf bench} sitting in an empty green {\bf park}\\ \hline
-  \end{tabular}
-  \caption{An illustrative sentence with its nearest neighbour at layer 1 and layer 3. For readability, sentences are displayed in conventional spelling, and only highlight matching substrings of length $\geq3$. In reality we used phonetic transcriptions to compute shared substring positions, and used substrings of all lengths. }
-\label{fig:example-shared}
-\end{figure}
-
-
 \begin{table}[h]
-	\centering
-	\begin{tabular}{rr}
-                Layer   & Mean position \\\hline
-		      1 & 12.1 \\
-		      2 & 14.9 \\
-		      3 & 16.8 \\
-	\end{tabular}
-	\caption{Average position of symbols in shared substrings
-          between nearest neighbour sentences according to {\sc Phon GRU}
-          representations at the different layers. Positions are indexed from
-          end of string, i.e. index 0 is the last symbol.}
-\label{tab:substrings}
+  \begin{small}
+    \begin{minipage}{0.6\textwidth}
+      \begin{tabular}{c}
+        Layer 1 \\\hline
+        A metallic bench {\bf on a path in} the {\bf park} \\
+        A man riding a bicycle {\bf on a path} in a {\bf park} \\\hline
+        Layer 3 \\\hline
+        A metallic {\bf bench} on a path in the {\bf park} \\
+        A stone park {\bf bench} sitting in an empty green {\bf park}\\ \hline
+      \end{tabular}
+      \caption{An illustrative sentence with its nearest neighbour at
+        layer 1 and layer 3. For readability, sentences are displayed
+        in conventional spelling, and only highlight matching
+        substrings of length $\geq3$. In reality we used phonetic
+        transcriptions to compute shared substring positions, and 
+        substrings of all lengths. }
+      \label{tab:example-shared}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}{0.35\textwidth}
+      \centering
+      \begin{tabular}{rr}
+        Layer   & Mean position \\\hline
+        1 & 12.1 \\
+        2 & 14.9 \\
+        3 & 16.8 \\
+      \end{tabular}
+      \caption{Average position of symbols in shared substrings
+        between nearest neighbour sentences according to {\sc Phon
+          GRU} representations at the different layers. Positions are
+        indexed from end of string.}
+      \label{tab:substrings}
+    \end{minipage}
+  \end{small}
+
 \end{table}
+
+

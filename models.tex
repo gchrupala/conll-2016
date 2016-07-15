@@ -8,10 +8,26 @@ nets, followed by densely connected layer which maps the last hidden
 state of the top recurrent layer to a vector of visual features.
 
 \begin{figure}
-  \centering
+\begin{minipage}[l]{0.45\textwidth}
   \includegraphics[scale=0.2]{architecture.pdf}
   \caption{A three-timestep slice of the stacked recurrent architecture with three hidden layers.}
   \label{fig:architecture}
+\end{minipage}
+\hspace{0.3cm}
+\begin{minipage}[r]{0.45\textwidth}
+  \begin{tabular}{|l|}\hline
+    \includegraphics[scale=0.7]{woman-ipa.png} \\
+    A young woman riding a horse holding a flag\\\hline
+  \end{tabular}
+  \begin{center}
+    \includegraphics[scale=0.2]{rider.jpg}
+  \end{center}
+
+  \caption{(Top) Example of a postprocessed phonetic transcription
+    from eSpeak used as input to the {\sc Phon GRU} model. (Bottom)
+    Corresponding image (bottom)}
+  \label{fig:ipa}
+\end{minipage}
 \end{figure}
 
 Gated Recurrent Units (GRU) were introduced in
@@ -105,18 +121,21 @@ to the vector of image features using a fully connected layer:
 
 Our main interest lies in recurrent phoneme-level modeling. However, in order to
 put the performance of the phoneme-level {\sc Phon GRU} into
-perspective, we compare it to two word-level models. The performance of these models should not be seen as a baseline, as they exploit information that is unavailable to {\sc Phon GRU}: the identity of words is unambiguous to them.
+perspective, we compare it to two word-level models. Importantly,
+the word models should {\bf not} be seen as baselines, as they have access to
+word boundary and word identity information not available to
+{\sc Phon GRU}. 
 
 \subsection{Word GRU}
 The architecture of this model is the same as {\sc Phon GRU} with
 the difference that we use words instead of phonemes as input symbols,
 use learnable word embeddings instead of fixed one-hot phoneme
 encodings, and reduce the number of layers in the GRU stack. See
-\ref{sec:experiments} for details.
+Section~\ref{sec:experiments} for details.
 \subsection{Word Sum}
-The second model we use for comparison is word-based non-sequential
+The second model we use for comparison is a word-based non-sequential
 model, consisting of a word embedding matrix, a vector sum operator,
-and a mapping to the image vector feature vector:
+and a mapping to the image feature vector:
 \begin{equation}
   \label{eq:sum}
   \hat{\mathbf{i}} = \mathbf{I} \sum_{t=1}^n \mathbf{E}[:,w_t]
