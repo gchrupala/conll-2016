@@ -30,7 +30,7 @@ Most of the details of the three model types and training hyperparameters were a
 \subsection{Word boundary prediction}
 To explore the sensitivity of the {\sc Phon GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. Logistic regression models were trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks, with positional phoneme \textit{n}-grams in the range 1-\textit{n}. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the location of word boundaries according to conventional English spelling. However, eSpeak models some coarticulation effects which sometimes leads to word boundaries disappearing from the transcription. For example, {\it bank of a river} is transcribed as \textipa{[baNk @v@ \*rIv@]}.
 %[example of a phonetic transcription with 'ova']
-All models were implemented using the {\tt LogisticRegression} implementation from Scikit-learn \citep{scikit-learn} with L2-normalization. The captions of the visual feature prediction validation data were used as training data, and those of the test set as test data. The optimal value of regularization parameter \textit{C} was determined using {\tt GridSearchCV} with 5-fold cross validation on the training set, after which the model with the optimal settings was trained on all training data.
+All models were implemented using the {\tt LogisticRegression} implementation from Scikit-learn \cite{scikit-learn} with L2-normalization. The captions of the visual feature prediction validation data were used as training data, and those of the test set as test data. The optimal value of regularization parameter \textit{C} was determined using {\tt GridSearchCV} with 5-fold cross validation on the training set, after which the model with the optimal settings was trained on all training data.
 
 Table~\ref{tab:boundary} reports the scores on the test set. The proportion of phonemes preceding a word boundary is 0.29, meaning that predicting {\it no word boundary} by default would be correct in 0.71 of cases. At the highest hidden layer, enough information about the word form is available for correct prediction in 0.82 of cases - substantially above the majority baseline. The lower levels allow for more accurate prediction of word boundaries: 0.86 at the middle hidden layer, and 0.88 at the bottom level.
 Prediction scores of the logistic regression model based on the activation patterns of the lowest hidden layer are comparable to those of a bigram logistic regression model.
@@ -42,16 +42,16 @@ These results indicate that information on sub-word structure is only partially 
 	\begin{tabular}{lrrrr}
 		\textbf{Model} & & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} \\
 		\hline
-		Majority baseline & & .71 & & \\
+		Majority baseline & & 0.71 & & \\
 		\hline
-		Phon GRU & Layer 1 & .88 & .82 & .78 \\
-		& Layer 2 & .86 & .79 & .71 \\
-		& Layer 3 &  .82 & .74 & .60 \\
+		Phon GRU & Layer 1 & 0.88 & 0.82 & 0.78 \\
+		& Layer 2 & 0.86 & 0.79 & 0.71 \\
+		& Layer 3 &  0.82 & 0.74 & 0.60 \\
 		\hline
 		\textit{n}-gram & \textit{n} = 1 & .80 & .79 & .41 \\
-		& \textit{n} = 2 & .87 & .79 & .78 \\
-		& \textit{n} = 3 & .93 & .86 & .90 \\
-		& \textit{n} = 4 & .95 & .90 & .93
+		& \textit{n} = 2 & 0.87 & 0.79 & 0.78 \\
+		& \textit{n} = 3 & 0.93 & 0.86 & 0.90 \\
+		& \textit{n} = 4 & 0.95 & 0.90 & 0.93
 	\end{tabular}
 	\caption{Prediction scores of linear regression models based on activation vectors of {\sc Phon GRU} and on positional \textit{n}-grams}
 \label{tab:boundary}
