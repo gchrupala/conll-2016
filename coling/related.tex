@@ -1,0 +1,82 @@
+\section{Related work}
+A major part of learning language consists in learning its structure,
+but in order to be able to communicate it is also of crucial
+to learn the relation of words to entities in the
+world. % I don't like this sentence
+Grounded lexical acquisition is often modeled as cross-situational
+learning, a process of rule-based \cite{siskind.96} or statistical
+\cite{fazly.etal.10csj,frank.etal.07} inference of word-to-referent
+mappings.
+Cross-situational models typically work on word-level language input
+and symbolic representations of the context. However, infants have to
+learn from continuous perceptual input. 
+\newcite{lazaridou2016multimodal} partially remedy this shortcoming
+and propose a model of learning word
+meanings from text paired with continuous image representations; the
+limitation of their work is the toy evaluation dataset.
+
+Recent experimental and computational studies have found that co-occurring visual information may help to learn word forms \cite{thiessen2010effects,Cunillera2010295,Glicksohn2013,Yurofsky2012statistical}. This suggests that acquisition of word form and meaning are interactive, rather than separate.
+
+The Cross-channel Early Lexical Learning (CELL) model of \newcite{Roy2002113} and the more recent work of \newcite{rasanen2015joint} take into account the continuous nature of the speech signal, and incorporate visual information as well. The CELL model learns to discover words in continuous speech through co-occurence with their visual referent, but the visual input only consists of the shape of single objects, effectively bypassing referential uncertainty. \newcite{rasanen2015joint} propose a probabilistic joint model of word segmentation and meaning acquisition from raw speech and a set of possible referents that appear in the context. In both \newcite{Roy2002113} and \newcite{rasanen2015joint} the visual context is considerably less noisy and ambiguous than that available to children.
+
+There is an extensive line of research on image captioning (see \newcite{bernardi2016automatic} for a recent overview). Typically, captioning models learn to recognize high-level image features and associate them with words. Inspired by both image captioning research and cross-situational human language acquisition, two recent automatic speech recognition models learn to recognize word forms from visual data. In \newcite{synnaeve2014learning}, language input consists of single spoken words and visual data consists of image fragments, which the model learns to associate. \newcite{harwath2015deep} employ two convolutional neural networks, a visual object recognition model and a word recognition model, and an embedding alignment model that learns to map recognized words and objects into the same high-dimensional space. Although the object recognition works on the raw visual input, the speech signal is segmented into words before presenting it to the word recognition model. Both \newcite{harwath2015deep} and \newcite{synnaeve2014learning} recognize words from pre-segmented speech.
+
+Character-level input representations have recently gained attention
+in NLP. \newcite{ling2015finding} and
+\newcite{plank2016multilingual} use bidirectional LSTMs to compose
+characters into word embeddings, while
+\newcite{chung2016character} propose machine translation model with 
+character level output. These approaches exploit character-level
+information but crucially they assume that word boundaries are available
+in the input.
+%These units may correspond to whole words, morphemes, or characters,
+%but are restricted to subsequences of individual words and never cross
+%word boundaries. 
+Character-level neural NLP \textit{without} explicit word boundaries in the input is studied in cases where fixed vocabularies are inherently problematic, e.g.\ with combined natural and programming language input \cite{chrupala2013text} or when specifically dealing with misspelled words in automatic writing feedback \cite{xie2016neural}. 
+
+Character-level language models are analyzed in
+\newcite{hermans2013training} and
+\newcite{karpathy2015visualizing}. Both studies show that
+character-level recurrent neural networks are sensitive to
+long-range dependencies: for example by keeping track of opening and
+closing parentheses over stretches of
+text. \newcite{hermans2013training} describe the hierarchical
+organization that emerges during training, with higher layers
+processing information over longer timescales. In our work we show
+related effects in a model of visually-grounded
+language learning from unsegmented phonetic strings without word
+boundaries or strong cues such as whitespace and punctuation.
+
+We use phonetic transcription of full sentences as a first step
+towards large-scale multimodal language learning from speech
+co-occurring with visual scenes. 
+Our use of phonetic
+transcription rather than raw speech signal simplifies learning
+and allows us to perform experiments on the encoding of linguistic
+knowledge as reported in section \ref{sec:experiments} without
+additional annotation. 
+In contrast to \newcite{Roy2002113}
+and \newcite{rasanen2015joint}, the visual input to our model consists
+of high-level visual features, which means it contains ambiguity and
+noise. In contrast to \newcite{synnaeve2014learning} and
+\newcite{harwath2015deep}, we consider full utterances rather than
+separate words. As \newcite{harwath2015deep} note, the learning task
+of a multimodal model becomes significantly more complicated when the
+language input consists of unsegmented speech. The absence of word
+boundaries in the input data is essential to our aim. 
+
+To our knowledge, there is no work yet on multimodal phoneme or character-level language modeling with visual input. % multimodal and visual - double?
+% Our study is complementary to work on character-level language modeling: while language models focus on {\it within}-text co-occurrence statistics as clues to language structure, in our setting the weight is on the correlations  {\it between} language and the visual scenes. 
+Although the language input in this study is low-level-symbolic rather
+than perceptual, the learning problem is similar to that of a human language learner: discover language structure as well as meaning, based on ambiguous and noisy data from another modality. 
+
+\newcite{chrupala2015learning} simulate visually grounded human
+language learning in face of noise and ambiguity in the visual
+domain. Their model predicts visual context given a sequence of words. While the visual input consists of a continuous representation, the language input consists of a sequence of words. The aim of this study is to take their approach one step further towards multimodal language learning from raw perceptual input. 
+\newcite{Kdr2016RepresentationOL} develop techniques for understanding
+and interpretation of the representations of linguistic form and
+meaning in recurrent neural networks, and apply these to word-level
+models. In our work we share the goal of revealing the nature of
+emerging representations, but we do not assume words as their basic
+unit. Also, we are especially concerned with the emergence of a
+hierarchy of levels of representations in stacked recurrent networks. 
