@@ -1,6 +1,8 @@
 \subsection{Prediction of visual features}
 \label{subsec:visual}
-The models are trained and evaluated on the prediction of visual feature vectors from captions. We are not devising an image retrieval method, but this task reflects the ability to extract visually salient semantic information from language.
+The models are trained and evaluated on the prediction of visual
+feature vectors from captions. While our goal is not to develop an
+image retrieval method, we use this this task as it reflects the ability to extract visually salient semantic information from language.
 For the experiments on the prediction of visual features all models
 were trained on the training set of MS COCO. As validation and test data we
 used a random sample of 5000 images each from the MS COCO validation set. 
@@ -18,14 +20,14 @@ overall performance, the {\sc Phon GRU} model falls between the
 \begin{figure}
     \centering
   \begin{minipage}{0.45\textwidth}
-    \includegraphics[scale=0.3]{loss-zoom.pdf}
+    \includegraphics[scale=0.32]{loss-zoom.pdf}
     \caption{Value of the loss function on validation data during
       training. Three random initialization of each model are shown.}
     \label{fig:loss}
   \end{minipage}
 \hspace{0.3cm}
   \begin{minipage}{0.45\textwidth}
-    \includegraphics[scale=0.25]{accat5.pdf}
+    \includegraphics[scale=0.32]{accat5.pdf}
     \caption{Validation accuracy at 5 on the image retrieval task.}
     \label{fig:accat5}
   \end{minipage}
@@ -53,10 +55,18 @@ hidden layers is the best of the phoneme-level models.
 
 In Table~\ref{tab:accat5test} we show the accuracies of the best
 version of each of the models types on the test images; these are also
-the model versions used in all subsequent experiments. The accuracy @ 5 for the {\sc Word GRU} is comparable to what
-\newcite{chrupala2015learning} report for their multitask {\sc Imaginet}
-model, whose visual pathway has the same structure.
-
+the model versions used in all subsequent experiments. The accuracy @
+5 for the {\sc Word GRU} is comparable to what
+\newcite{chrupala2015learning} report for their multitask {\sc
+  Imaginet} model, whose visual pathway has the same
+structure. \newcite{vendrov2015order} report substantially higher
+scores for image search with a word level GRU model, with the
+following main differences from our setting: better image features,
+larger training set, and a loss function optimized for the ranking
+task.\footnote{We have preliminary results indicating that most of the
+  analyses in rest of Section~\ref{sec:experiments} show the same general
+  pattern for phoneme models trained following the setting of
+  \newcite{vendrov2015order}.}.
 
 % \begin{table}
 %   \centering

@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 library(stringr)
-setwd("~/repos/conll-2016/src")
+setwd("~/repos/conll-2016/coling/src")
 
 size <- Vectorize(function(exp){
   if (str_sub(exp, 11, 11) == "5") {
@@ -40,7 +40,7 @@ ggplot(data=data %>% filter(epoch < 3 & Model %in% c("Word Sum","Word GRU 1", "P
   scale_x_continuous(breaks=0:8 * MAX, labels=0:8) +
   xlab("Epoch") +
   ylab("Loss") +
-  theme(aspect.ratio=2/3, text=element_text(size=25))
+  theme(aspect.ratio=2/3, text=element_text(size=27))
 ggsave("../loss.png")
 
 # Zoom in
@@ -52,7 +52,7 @@ ggplot(data=data %>% filter(Model %in% c("Word Sum","Word GRU 1", "Phon GRU 3"))
   scale_x_continuous(breaks=0:8 * MAX, labels=0:8) +
   xlab("Epoch") +
   ylab("Loss") +
-  theme(aspect.ratio=2/3, text=element_text(size=25))
+  theme(aspect.ratio=2/3, text=element_text(size=27))
 ggsave("../loss-zoom.pdf")
 
 data %>% group_by(Model) %>% summarize(min_loss=(min(loss))) %>% ggplot(aes(y=min_loss, x=Model)) + geom_boxplot()
@@ -67,7 +67,7 @@ recall  %>% group_by(exp) %>% summarize(max_score=max(score)) %>%
   geom_point(size=3, alpha=0.5) +
   coord_flip() +
   ylab("Accuracy at 5") +
-  theme(aspect.ratio=2/2.5, text=element_text(size=25))
+  theme(aspect.ratio=2/3, text=element_text(size=25))
 ggsave("../accat5.pdf")
 
 recall %>% parse_exp() %>% group_by(exp) %>% ggplot(aes(x=Model, y=score)) + geom_boxplot()
