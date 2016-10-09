@@ -2,7 +2,7 @@
 A major part of learning language consists in learning its structure,
 but in order to be able to communicate it is also of crucial
 to learn the relation of words to entities in the
-world. % I don't like this sentence
+world.
 Grounded lexical acquisition is often modeled as cross-situational
 learning, a process of rule-based \cite{siskind.96} or statistical
 \cite{fazly.etal.10csj,frank.etal.07} inference of word-to-referent
@@ -44,28 +44,25 @@ text. \newcite{hermans2013training} describe the hierarchical
 organization that emerges during training, with higher layers
 processing information over longer timescales. In our work we show
 related effects in a model of visually-grounded
-language learning from unsegmented phonetic strings without word
-boundaries or strong cues such as whitespace and punctuation.
+language learning from unsegmented phonemic strings.
 
 We use phonetic transcription of full sentences as a first step
 towards large-scale multimodal language learning from speech
 co-occurring with visual scenes. 
-Our use of phonetic
+The use of phonetic
 transcription rather than raw speech signal simplifies learning
 and allows us to perform experiments on the encoding of linguistic
 knowledge as reported in section \ref{sec:experiments} without
-additional annotation. 
+additional annotation. It is our goal to model a multi-modal language learning process that includes the segmentation problem faced by human language learners. In contrast to character-level NLP and language modelling approaches, our input data therefore does not contain word boundaries or strong cues such as whitespace and punctuation.
+
 In contrast to \newcite{Roy2002113}
 and \newcite{rasanen2015joint}, the visual input to our model consists
 of high-level visual features, which means it contains ambiguity and
 noise. In contrast to \newcite{synnaeve2014learning} and
 \newcite{harwath2015deep}, we consider full utterances rather than
-separate words. As \newcite{harwath2015deep} note, the learning task
-of a multimodal model becomes significantly more complicated when the
-language input consists of unsegmented speech. The absence of word
-boundaries in the input data is essential to our aim. 
+separate words. 
 
-To our knowledge, there is no work yet on multimodal phoneme or character-level language modeling with visual input. % multimodal and visual - double?
+To our knowledge, there is no work yet on multimodal phoneme or character-level language modeling with visual input.
 % Our study is complementary to work on character-level language modeling: while language models focus on {\it within}-text co-occurrence statistics as clues to language structure, in our setting the weight is on the correlations  {\it between} language and the visual scenes. 
 Although the language input in this study is low-level-symbolic rather
 than perceptual, the learning problem is similar to that of a human language learner: discover language structure as well as meaning, based on ambiguous and noisy data from another modality. 
