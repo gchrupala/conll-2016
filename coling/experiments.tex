@@ -1,14 +1,14 @@
 \section{Experiments}
 \label{sec:experiments}
 
-For all experiments, the models were trained on the training set of MS-COCO. MS-COCO contains over 163,000 images accompanied by at least five captions by human annotators. With an average of 7.7 labelled object instances per image, images typically contain more objects than the captions mention, making reference to the scene ambiguous. Textual input for the {\sc Phon GRU} models was transcribed automatically using the grapheme-to-phoneme functionality with the default English voice of the eSpeak speech synthesis toolkit.\footnote{Available at \url{http://espeak.sourceforge.net}} Stress and pause markers were removed, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. See Figure~\ref{fig:ipa} for an example transcription.
+For all experiments, the models were trained on the training set of MS-COCO. MS-COCO contains over 163,000 images accompanied by at least five captions by human annotators. With an average of 7.7 labeled object instances per image, images typically contain more objects than the captions mention, making reference to the scene ambiguous. Textual input for the {\sc Phon GRU} models was transcribed automatically using the grapheme-to-phoneme functionality with the default English voice of the eSpeak speech synthesis toolkit.\footnote{Available at \url{http://espeak.sourceforge.net}} Stress and pause markers were removed, as well as word boundaries (after storing their position for use in experiments), leaving only phoneme symbols. See Figure~\ref{fig:ipa} for an example transcription.
 
 
 Visual input for all models was obtained by forwarding images through the 16-layer convolutional neural network described in \newcite{simonyan2014very} pre-trained on Imagenet \cite{ILSVRCarxiv14}, and recording the activation vectors of the pre-softmax layer. The z-score transformation was applied to these features to ease optimization. 
 
 Most of the details of the three model types and training
 hyperparameters were adopted from related work, and adapted via
-informal exploration. Full exploration of the search space was not feasible due to the large number of adjustable settings in these models and their long running time. Given the importance of depth for our purposes, we did systematically explore the number of layers in the {\sc Phon GRU} and {\sc Word GRU} models. A single layer is optimal for {\sc Word GRU}. For {\sc Phon GRU}, see Section~\ref{subsec:visual} below. Other important settings were as follows:
+a limited amount of exploratory experimentation. Exhaustive exploration of the search space was not feasible due to the large number of adjustable settings in these models and their long running time. Given the importance of depth for our purposes, we did systematically explore the number of layers in the {\sc Phon GRU} and {\sc Word GRU} models. A single layer is optimal for {\sc Word GRU}. For {\sc Phon GRU}, see Section~\ref{subsec:visual} below. Other important settings were as follows:
 \begin{itemize}
 \setlength\itemsep{-0.5em}
 \item All models: Implemented in Theano \cite{Bastien-Theano-2012}, optimized with 
@@ -21,28 +21,28 @@ informal exploration. Full exploration of the search space was not feasible due 
 
 \input{visual}
 \subsection{Word boundary prediction}
-To explore the sensitivity of the {\sc Phon GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-ends in the hidden layers. Logistic regression models were trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks, with positional phoneme \textit{n}-grams in the range 1-\textit{n}. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the location of word boundaries according to conventional English spelling. However, eSpeak models some coarticulation effects which sometimes leads to word boundaries disappearing from the transcription. For example, {\it bank of a river} is transcribed as \textipa{[baNk @v@ \*rIv@]}.
+To explore the sensitivity of the {\sc Phon GRU} model to linguistic structure at the sub-word level, we investigated the encoding of information about word-boundaries in the hidden layers. Logistic regression models were trained on activation patterns of the hidden layers at all timesteps, with the objective of identifying phonemes that preceded a word boundary. For comparison, we also trained logistic regression models on \textit{n}-gram data to perform the same tasks, with positional phoneme \textit{n}-grams in the range $1$-\textit{n}. The location of the word boundaries was taken from the eSpeak transcriptions, which mostly matches the location of word boundaries according to conventional English spelling. However, eSpeak models some coarticulation effects which sometimes leads to word boundaries disappearing from the transcription. For example, {\it bank of a river} is transcribed as \textipa{[baNk @v@ \*rIv@]}.
 
-All models were implemented using the {\tt LogisticRegression} implementation from Scikit-learn \cite{scikit-learn} with L2-regularization. The random samples of 5000 images each that served as validation and test sets in the visual feature prediction task were used as training and test sets. The optimal value of regularization parameter \textit{C} was determined using {\tt GridSearchCV} with 5-fold cross validation on the training set, after which the model with the optimal settings was trained on the full training sample.
+All models were implemented using the {\tt LogisticRegression} implementation from Scikit-learn \cite{scikit-learn} with L2-regularization. The random samples of 5,000 images each that served as validation and test sets in the visual feature prediction task were used as training and test sets. The optimal value of regularization parameter \textit{C} was determined using {\tt GridSearchCV} with 5-fold cross validation on the training set, after which the model with the optimal settings was trained on the full training sample.
 
-Table~\ref{tab:boundary} reports the scores on the test set. The proportion of phonemes preceding a word boundary is 0.29, meaning that predicting {\it no word boundary} by default would be correct in 0.71 of cases. At the highest hidden layer, enough information about the word form is available for correct prediction in 0.82 of cases - substantially above the majority baseline. The lower levels allow for more accurate prediction of word boundaries: 0.86 at the middle hidden layer, and 0.88 at the bottom level.
+Table~\ref{tab:boundary} reports the scores on the test set. The proportion of phonemes preceding a word boundary is 0.29, meaning that predicting {\it no word boundary} by default would be correct in 0.71 of cases. At the highest hidden layer, enough information about the word form is available for correct prediction in 0.82 of cases -- substantially above the majority baseline. The lower levels allow for more accurate prediction of word boundaries: 0.86 at the middle hidden layer, and 0.88 at the bottom level.
 Prediction scores of the logistic regression model based on the activation patterns of the lowest hidden layer are comparable to those of a bigram logistic regression model.
 
 These results indicate that information on sub-word structure is only partially encoded by {\sc Phon GRU}, and is mostly absent by the time the signal from the input propagates to the top layer. The bottom layer does learn to encode a fair amount of word boundary information, but the prediction score substantially below 100\% indicates that it is rather selective. 
 
 \begin{table}[h]
-  \begin{small}
+%  \begin{small}
     \centering
 
         \begin{minipage}{0.35\textwidth}
           \centering
-          \begin{tabular}{l|r}
-            Model & Acc @ 5 \\\hline
-            {\sc Word Sum} & 0.158 \\
-            {\sc Word GRU} & 0.205 \\
-            {\sc Phon GRU} & 0.180 \\
+          \begin{tabular}{l|rr}
+                     Model & Acc @ 5 & Acc @ 10 \\\hline
+            {\sc Word Sum} & 0.158     & 0.243 \\
+            {\sc Word GRU} & 0.205     & 0.306 \\
+            {\sc Phon GRU} & 0.180     & 0.276 \\
           \end{tabular}
-          \caption{Image retrieval accuracy at 5 on test data for the
+          \caption{Image retrieval accuracy at 5 and at 10 on test data for the
             versions of {\sc Word Sum}, {\sc Word GRU} and {\sc Phon
               GRU} chosen by validation.}
           \label{tab:accat5test}
@@ -69,21 +69,21 @@ These results indicate that information on sub-word structure is only partially 
             \textit{n}-grams}
           \label{tab:boundary}
         \end{minipage}
-      \end{small}
+ %     \end{small}
 
 \end{table}
 
 \subsection{Word similarity}
 % not sure about this next sentence yet
-To understand the encoding of semantic information in {\sc Phon GRU}, we analysed the cosine similarity of activation vectors for word pairs from the MEN Test Collection \cite{bruni2014multimodal}. The MEN dataset contains 3,000 pairs of English words with semantic similarity judgements on a 50-point scale, which were obtained through crowd-sourcing.\footnote{The MEN dataset is available at \url{http://clic.cimec.unitn.it/~elia.bruni/MEN}}
+To understand the encoding of semantic information in {\sc Phon GRU}, we analyzed the cosine similarity of activation vectors for word pairs from the MEN Test Collection \cite{bruni2014multimodal}. The MEN dataset contains 3,000 pairs of English words with semantic similarity judgements on a 50-point scale, which were obtained through crowd-sourcing.\footnote{The MEN dataset is available at \url{http://clic.cimec.unitn.it/~elia.bruni/MEN}}
 For each word pair in the MEN dataset, the words were transcribed phonetically using eSpeak and then fed to {\sc Phon GRU} individually. For comparison, the words were also fed to {\sc Word GRU} and {\sc Word Sum}. Word pair similarity was quantified as the cosine similarity between the activation patterns of the hidden layers at the end-of-sentence symbol.
 In contrast to {\sc Word GRU} and {\sc Word Sum}, {\sc Phon GRU} has access to the sub-word structure. To explore the role of phonemic form in word similarity, a measure of phonemic difference was included: the Levenshtein distance between the phonetic transcriptions of the two words, normalized by the length of the longer transcription. 
 
-Table~\ref{tab:human} shows Spearman's rank correlation coefficient between human similarity ratings from the MEN dataset and cosine similarity at the last timestep for all hidden layers. In all layers, the cosine similarities between the activation vectors for two words are significantly correlated with human similarity judgements. The strength of the correlation differs considerably between the layers, ranging from 0.09 in the first layer to 0.28 in the highest hidden layer. The second column in Table~\ref{tab:human} shows the correlations when only taking into account the 1283 word pairs of which both words appear at least 100 times in the training set of MS COCO. 
+Table~\ref{tab:human} shows Spearman's rank correlation coefficient between human similarity ratings from the MEN dataset and cosine similarity at the last timestep for all hidden layers. In all layers, the cosine similarities between the activation vectors for two words are significantly correlated with human similarity judgements. The strength of the correlation differs considerably between the layers, ranging from 0.09 in the first layer to 0.28 in the highest hidden layer. The second column in Table~\ref{tab:human} shows the correlations when only taking into account the 1283 word pairs of which both words appear at least 100 times in the training set of MS-COCO. 
 Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher than for {\sc Phon GRU}. This is expected given that these are word level models with explicit word-embeddings, while {\sc Phon GRU} builds word representations by forwarding phoneme-level input through several layers of processing.
 
 \begin{table}[h]
-  \begin{small}
+%  \begin{small}
     \begin{minipage}[l]{0.55\textwidth}
       \centering
       \begin{tabular}{rrr}
@@ -117,7 +117,7 @@ Correlations for both {\sc Word GRU} and {\sc Word SUM} are considerably higher 
         $< 1\mathrm{e}{-15}$.}
       \label{tab:edit}
     \end{minipage}
-  \end{small}
+%  \end{small}
 
 \end{table}
 
@@ -132,13 +132,13 @@ The correlations of cosine similarities with edit distance on the one hand, and 
 \subsection{Position of shared substrings}
 Here we quantify the time-scale at which information is retained in
 the different layers of {\sc Phon GRU}. We looked at the location of
-phoneme strings shared by sentences and their nearest neighbours in the 5000 image validation sample.
-We determined each sentences' nearest neighbour for each hidden layer in {\sc Phon GRU}. The nearest neighbour is the sentence for which the activation vector at the end of sentence symbol has the smallest cosine distance to the activation vector of the original sentence. The position of matching substrings is the average position in the original sentence of symbols in substrings that are shared by the neighbour sentences, counted from the end of the sentence. A high mean average substring position thus means that the shared substring(s) appear early in the sentence. This gives an indirect measure of the timescale at which the different layers operate. Table~\ref{tab:example-shared} shows an example.
+phoneme strings shared by sentences and their nearest neighbors in the 5,000-image validation sample.
+We determined each sentence's nearest neighbor for each hidden layer in {\sc Phon GRU}. The nearest neighbour is the sentence for which the activation vector at the end of sentence symbol has the smallest cosine distance to the activation vector of the original sentence. The position of matching substrings is the average position in the original sentence of symbols in substrings that are shared by the neighbor sentences, counted from the end of the sentence. A high mean average substring position thus means that the shared substring(s) appear early in the sentence. This gives an indirect measure of the timescale at which the different layers operate. Table~\ref{tab:example-shared} shows an example.
 
-As can be seen in Table~\ref{tab:substrings}, the average position of shared substrings in neighbour sentences is closest to the end for the first hidden layer and moves towards the beginning of the sentence for the second and third hidden layer. This indicates a difference between the layers with regards to the timescale they represent. Whereas in the lowest layer only information from the latest timesteps is present, the higher layers retain the input signal over longer timescales.
+As can be seen in Table~\ref{tab:substrings}, the average position of shared substrings in neighbor sentences is closest to the end for the first hidden layer and moves towards the beginning of the sentence for the second and third hidden layer. This indicates a difference between the layers with regards to the timescale they represent. Whereas in the lowest layer only information from the latest timesteps is present, the higher layers retain the input signal over longer timescales.
 
 \begin{table}[h]
-  \begin{small}
+%  \begin{small}
     \begin{minipage}{0.6\textwidth}
       \begin{tabular}{c}
         Layer 1 \\\hline
@@ -171,7 +171,7 @@ As can be seen in Table~\ref{tab:substrings}, the average position of shared sub
         indexed from end of string.}
       \label{tab:substrings}
     \end{minipage}
-  \end{small}
+%  \end{small}
 
 \end{table}
 
